@@ -1,0 +1,1 @@
+/usr/bin/c++ -std=c++17 -O3 -rdynamic CMakeFiles/run_DMRG.dir/main/run_DMRG.cpp.o -o ../run_DMRG  libcommon.a 

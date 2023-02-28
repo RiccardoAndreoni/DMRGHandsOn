@@ -1,0 +1,4 @@
+/home/riccardo/R/SISSA/Collura_HO/build/CMakeFiles/common.dir
+/home/riccardo/R/SISSA/Collura_HO/build/CMakeFiles/run_DMRG.dir
+/home/riccardo/R/SISSA/Collura_HO/build/CMakeFiles/edit_cache.dir
+/home/riccardo/R/SISSA/Collura_HO/build/CMakeFiles/rebuild_cache.dir
