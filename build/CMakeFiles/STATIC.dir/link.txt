@@ -1,2 +1,0 @@
-/usr/bin/ar qc libSTATIC.a CMakeFiles/STATIC.dir/modules/DMRG.cpp.o
-/usr/bin/ranlib libSTATIC.a
