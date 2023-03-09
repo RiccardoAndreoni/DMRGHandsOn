@@ -5,6 +5,7 @@
 
 // block::block(model &M){
 // 	l = 1;
+    
 
 // 	// Initialize single site Hamiltonian
 // 	// InitHamiltonian();
@@ -19,4 +20,5 @@
 //     //     H[j] = h * O[3][j];
 //     // }
 // }
+
 

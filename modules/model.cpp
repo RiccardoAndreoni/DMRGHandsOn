@@ -5,10 +5,11 @@
 
 model::model(double Jx_, double Jy_, double Jz_, double h_, int dim_)
 {
-	// Set Hamiltonian parameters 
-	Jx = gsl_complex_rect(Jx_, 0);	//read(Jx, parfile)
-	Jy = gsl_complex_rect(Jy_, 0);	//read(Jy, parfile)
-	Jz = gsl_complex_rect(Jz_, 0);	//read(Jz, parfile)
+	// Set Hamiltonian parameters
+	J = new gsl_complex[3];
+	J[0] = gsl_complex_rect(Jx_, 0);	//read(Jx, parfile)
+	J[1] = gsl_complex_rect(Jy_, 0);	//read(Jy, parfile)
+	J[2] = gsl_complex_rect(Jz_, 0);	//read(Jz, parfile)
 	h  = gsl_complex_rect(h_, 0);	//read(h, parfile)
 
 	// Set local dimension
@@ -85,9 +86,9 @@ void model::InitH(){
 
 	// Hint = Jx*SxSx + Jy*SySy + Jz*SzSz
 	Hint = gsl_matrix_complex_calloc(dim*dim,dim*dim);
-	gsl_blas_zgetp(Jx, O[1], O[1], Hint);
-	gsl_blas_zgetp(Jy, O[2], O[2], Hint);
-	gsl_blas_zgetp(Jz, O[3], O[3], Hint);
+	gsl_blas_zgetp(J[1], O[1], O[1], Hint);
+	gsl_blas_zgetp(J[2], O[2], O[2], Hint);
+	gsl_blas_zgetp(J[3], O[3], O[3], Hint);
 
 	// TEST: print Hs and Hint
 		cout << "Hs = " << endl;
@@ -96,10 +97,3 @@ void model::InitH(){
 		gsl_matrix_complex_print(Hint);
 	//
 }
-
-// Get parameters
-
-int model::D(){ return dim;}
-gsl_complex model::JX(){ return Jx;}
-gsl_complex model::JY(){ return Jy;}
-gsl_complex model::JZ(){ return Jz;}

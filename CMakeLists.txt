@@ -36,7 +36,10 @@ target_link_libraries(run_DMRG common GSL::gsl GSL::gslcblas) # pthread)
 # add_executable(test_tp test/test_tp.cpp)
 # target_link_libraries(test_tp common GSL::gsl GSL::gslcblas) # pthread)
 
-
 # find_package(GSL REQUIRED)
 # add_executable(test_reshape test/test_reshape.cpp)
 # target_link_libraries(test_reshape common GSL::gsl GSL::gslcblas) # pthread)
+
+# find_package(GSL REQUIRED)
+# add_executable(test_lanczos1 test/test_lanczos1.cpp)
+# target_link_libraries(test_lanczos1 common GSL::gsl GSL::gslcblas) # pthread)

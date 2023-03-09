@@ -12,6 +12,7 @@
 #include<gsl/gsl_matrix_complex_double.h>
 #include<gsl/gsl_blas.h>
 #include<gsl/gsl_complex_math.h>
+#include <lambda_lanczos/lambda_lanczos.hpp>
 #define chimax = 100
 
 using namespace std;
@@ -21,13 +22,14 @@ using namespace std;
 class model
 {
 	private:
-		gsl_complex Jx, Jy, Jz, h;
+		gsl_complex* J;
+		gsl_complex h;
 		int dim;
 
-		gsl_matrix_complex** O;	//Single site operators
-		void InitOps();			//Initialize ssOps depending on spin 
+		gsl_matrix_complex** O;		//Single site operators
+		void InitOps();				//Initialize ssOps depending on spin 
 
-		gsl_matrix_complex* Hs;	//Single site Hamiltonian
+		gsl_matrix_complex* Hs;		//Single site Hamiltonian
 		gsl_matrix_complex* Hint;	//(NN) interaction Hamiltonian
 		void InitH();
 
@@ -35,10 +37,11 @@ class model
 		model(double Jx_, double Jy_, double Jz_, double h_, int dim_);
 		model(string parfile);
 
-		int D(); 	// get dim
-		gsl_complex JX();	// get Jx
-		gsl_complex JY();	// get Jy
-		gsl_complex JZ();	// get Jz
+		/* Get parameters */
+		int getDim(){ return dim; }							//Get dim
+		gsl_complex getJ(size_t i){ return J[i]; }			//Get J[i]
+		gsl_matrix_complex * getO(size_t i){ return O[i]; }	//Get O[i]
+		gsl_matrix_complex * getHs(){ return Hs; }			//Get H single site
 };
 
 class block
@@ -47,15 +50,25 @@ class block
   		
   		int l;										//Size of the block
   		int chi; 									//Number of the eigenvectors: min{chimax, d^l}
-  		complex<double>* H;							//Hamiltonian
+
+  		gsl_matrix_complex * H;						//Hamiltonian
 		void InitHamiltonian();						//Initialize H from operators
   		void SetHamiltonian(complex<double>* M);  	//Import the renormalized H (thilde) from system
 
+		gsl_matrix_complex*** S;					//Renormalized single site operators acting on the whole block space
+
   	public: 
 
-  		double* GetHamiltonian();
-  		void EnlargeBlock(double* M);
   		block(model &M);							//Default constructor as single site block
+
+  		double* GetHamiltonian();
+  		void EnlargeBlock(double* M);				//Substitute H with the new renormalized Hamiltonian
+
+		// Get parameters
+		int getChi() { return chi; }
+		int getl() { return l; }
+		gsl_matrix_complex * getS(int site, int a){ return S[site][a]; }
+		gsl_matrix_complex * getH(){ return H; }	//Get O[i]
 
 };
 
@@ -63,20 +76,24 @@ class sys
 {
 	private: 
 
-		model M;
-		block L, R;
-		double* Hss;		//Site-site interaction Hamiltonian
-		double* GS;
+		model* M;
+		block* L;
+		block* R;
+		double* Hss;				//Site-site interaction Hamiltonian
+		gsl_matrix_complex * GS;	// Ground state of the system
 		void InitHss();
 
 	public:
 
-		sys();
+		sys(double Jx_, double Jy_, double Jz_, double h_, int dim_);
 
 		// GS computation
 		void compute_GS();
-		// auto mv_mul = [&](const vector<double>& in, vector<double>& out);
-		void Ham_mul(gsl_matrix_complex * in, gsl_matrix_complex * out);
+		// auto mv_mul = [&](const std::vector<double>& in, std::vector<double>& out);
+
+		// Add sites
+		void add_site_L(gsl_matrix_complex * H);	// Add site to the left block to build HLo from HL
+		void add_site_R(gsl_matrix_complex * H);	// Add site to the left block to build HoR from HR
 
 		void compute_Rmat();
 		// double* GetHtot();
@@ -89,8 +106,8 @@ class DMRG
 	private: 
 
 		sys S;
-		double** RL;
-		double** RR;
+		std::vector<gsl_matrix_complex*> RL;
+		std::vector<gsl_matrix_complex*> RR;
 
 	public: 
 
