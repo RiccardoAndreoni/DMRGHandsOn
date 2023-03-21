@@ -90,17 +90,14 @@ class sys
 
 		sys(double Jx_, double Jy_, double Jz_, double h_, int dim_);
 
-		// GS computation
-		double compute_GS();
-		// auto mv_mul = [&](const std::vector<double>& in, std::vector<double>& out);
-
 		// Add sites
 		void computeHLo(gsl_matrix_complex * H);	// Add site to the left block to build HLo from HL
 		void computeHoR(gsl_matrix_complex * H);	// Add site to the left block to build HoR from HR
 
-		void compute_Rmat();
-		// double* GetHtot();
+		// GS computation
+		double compute_GS();
 
+		void compute_Rmat();
 };
 
 class DMRG

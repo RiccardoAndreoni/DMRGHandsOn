@@ -13,6 +13,6 @@ int main(){
     // cout << "Jz = " << GSL_REAL(SYS->M->getJ(2)) << endl;    
 
     SYS->compute_GS();
-
+    
     return 0;
 }

@@ -56,15 +56,19 @@ double sys::compute_GS()
     int dim = M->getDim();
     int n = dim*dim*chi_l*chi_r;
 
-    // cout << "ComputeGS" << endl;    // TEST
+    // Allocate GS
+    gsl_matrix_complex_free(GS);
+    GS = gsl_matrix_complex_calloc(chi_l*dim, dim*chi_r);
 
     // Define Hlo and Hor starting from HL and HR
     gsl_matrix_complex * HLo = gsl_matrix_complex_calloc(chi_l*dim, chi_l*dim);
     computeHLo(HLo);
-    // cout << "HLo = " << endl;       // TEST
-    // gsl_matrix_complex_print(HLo);  // TEST
     gsl_matrix_complex * HoR = gsl_matrix_complex_calloc(dim*chi_r, dim*chi_r); 
     computeHoR(HoR);
+
+    // cout << "ComputeGS" << endl;    // TEST
+    // cout << "HLo = " << endl;       // TEST
+    // gsl_matrix_complex_print(HLo);  // TEST
     // cout << "HoR = " << endl;       // TEST
     // gsl_matrix_complex_print(HoR);  // TEST
 
