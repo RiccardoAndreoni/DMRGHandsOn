@@ -21,6 +21,20 @@ void gsl_matrix_complex_print(const gsl_matrix_complex *m)
 	}
 }
 
+void gsl_matrix_print(const gsl_matrix *m)
+{
+	size_t i, j;
+	const size_t N = m->size1;
+	const size_t M = m->size2;
+
+	for (i = 0; i < N; ++i){
+		for (j = 0; j < M; ++j){
+			cout << gsl_matrix_get(m, i, j) << "\t";
+		}
+		cout << endl;
+	}
+}
+
 // Tensor product
 
 int  gsl_blas_zgetp (const gsl_complex alpha,
@@ -64,6 +78,16 @@ void res_vec_mat(const vector<double>& in, gsl_matrix_complex * out){
     }
 }
 
+void res_vec_mat(const vector<double>& in, gsl_matrix * out){
+    size_t rows = out->size1;
+    size_t cols = out->size2;
+    for(size_t i=0; i<rows; i++){
+        for(size_t j=0; j<cols; j++){
+            gsl_matrix_set(out, i, j, in[j + i*rows]);
+        }
+    }
+}
+
 void res_mat_vec(gsl_matrix_complex * in, vector<double>& out){
     size_t rows = in->size1;
     size_t cols = in->size2;
@@ -72,4 +96,42 @@ void res_mat_vec(gsl_matrix_complex * in, vector<double>& out){
             out[j + i*rows] = GSL_REAL(gsl_matrix_complex_get(in, i, j));
         }
     }
+}
+
+// Convert
+
+void conv_real_comp(gsl_matrix_complex * out, gsl_matrix * in)
+{
+	if(in->size1 != out->size1) error_message("in and out must be the same size");
+	if(in->size2 != out->size2) error_message("in and out must be the same size");
+
+	size_t i, j;
+	const size_t N = in->size1;
+	const size_t M = in->size2;
+
+	for (i = 0; i < N; ++i)
+	{
+		for (j = 0; j < M; ++j)
+		{
+			gsl_matrix_complex_set(out, i, j, gsl_complex_rect(gsl_matrix_get(in, i, j), 0));
+		}
+	}
+}
+
+void conv_comp_real(gsl_matrix * out, gsl_matrix_complex * in)
+{
+	if(in->size1 != out->size1) error_message("in and out must be the same size");
+	if(in->size2 != out->size2) error_message("in and out must be the same size");
+
+	size_t i, j;
+	const size_t N = in->size1;
+	const size_t M = in->size2;
+
+	for (i = 0; i < N; ++i)
+	{
+		for (j = 0; j < M; ++j)
+		{
+			gsl_matrix_set(out, i, j, GSL_REAL(gsl_matrix_complex_get(in, i, j)));
+		}
+	}
 }
