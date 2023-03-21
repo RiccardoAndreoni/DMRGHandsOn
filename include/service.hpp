@@ -7,6 +7,7 @@
 
 void gsl_matrix_complex_print(const gsl_matrix_complex *m);
 void gsl_matrix_print(const gsl_matrix *m);
+void gsl_vector_print(const gsl_vector *v);
 
 // Tensor product
 

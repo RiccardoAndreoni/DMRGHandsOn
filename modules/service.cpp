@@ -35,6 +35,16 @@ void gsl_matrix_print(const gsl_matrix *m)
 	}
 }
 
+void gsl_vector_print(const gsl_vector *v)
+{
+	size_t i;
+	const size_t N = v->size;
+
+	for (i = 0; i < N; ++i){
+		cout << gsl_vector_get(v, i) << endl;
+	}
+}
+
 // Tensor product
 
 int  gsl_blas_zgetp (const gsl_complex alpha,

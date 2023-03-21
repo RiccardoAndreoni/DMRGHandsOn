@@ -12,8 +12,6 @@ sys::sys(double Jx_, double Jy_, double Jz_, double h_, int dim_)
     GS = gsl_matrix_complex_calloc(2,2);
 }
 
-
-
 /* Add site to the left block to build HLo from HL */
 
 void sys::computeHLo(gsl_matrix_complex * H)
@@ -45,8 +43,6 @@ void sys::computeHoR(gsl_matrix_complex * H)
 }
 
 /* GS computation */
-
-// WHERE do we allocate GS? Maybe change name add_site -> compute_HoL
 
 double sys::compute_GS()
 {
@@ -136,7 +132,7 @@ double sys::compute_GS()
     // cout << "Run Lanczos" << endl;  // TEST
     engine.run(eigenvalues, eigenvectors);
     // cout << "End Lanczos" << endl;  // TEST
-    res_vec_mat(eigenvectors[0], GS);
+    res_vec_mat(eigenvectors[0], GS); // NB: GS is real
 
     // cout << endl;                                                                           // TEST
     // for(size_t i=0; i<size(eigenvectors[0]); i++) {cout << eigenvectors[0][i] << endl;}     // TEST
@@ -145,5 +141,43 @@ double sys::compute_GS()
     return eigenvalues[0];
 }
 
+/* SVD and resize -> define RL and RR*/
 
+void sys::compute_Rmat()
+{
+    // Set dimensions
+    int chi_l = L->getChi();
+    int chi_r = R->getChi();
+    int dim = M->getDim();
+    // int n = dim*dim*chi_l*chi_r;
 
+    // Definition of temporary U and V, to be truncated after SVD
+    gsl_matrix * tempU = gsl_matrix_alloc(chi_l*dim, dim*chi_r);
+    conv_comp_real(tempU, GS);
+    gsl_matrix * tempV = gsl_matrix_alloc(dim*chi_r, dim*chi_r);
+    gsl_vector * tempS = gsl_vector_alloc(dim*chi_r);
+    gsl_vector * tempW = gsl_vector_alloc(dim*chi_r);
+
+    gsl_linalg_SV_decomp(tempU, tempV, tempS, tempW);
+
+    // cout << "U = " << endl;     // TEST
+    // gsl_matrix_print(tempU);    // TEST
+    // cout << endl;               // TEST
+    // cout << "V = " << endl;     // TEST
+    // gsl_matrix_print(tempV);    // TEST
+    // cout << endl;               // TEST
+    // cout << "S = " << endl;     // TEST
+    // gsl_vector_print(tempS);    // TEST
+
+    // Truncation
+    if(tempS->size > chimax)
+    {
+        //RL = Utruncated
+        //RR = Vtruncated
+    }
+    else
+    {
+        //RL = Utemp
+        //RR = Vtemp
+    }
+}

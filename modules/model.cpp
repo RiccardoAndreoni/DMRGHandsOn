@@ -74,12 +74,4 @@ void model::InitH(){
 	Hs = gsl_matrix_complex_calloc(dim,dim);
 	gsl_matrix_complex_memcpy(Hs, O[2]);
 	gsl_matrix_complex_scale(Hs, h);
-
-	// Hint = Jx*SxSx + Jy*SySy + Jz*SzSz 
-	// Hint = gsl_matrix_complex_calloc(dim*dim,dim*dim);
-	// gsl_blas_zgetp(J[0], O[0], O[0], Hint);
-	// gsl_blas_zgetp(J[1], O[1], O[1], Hint);
-	// gsl_blas_zgetp(J[2], O[2], O[2], Hint);
-	// gsl_blas_zgetp(h, Id, O[2], Hint);
-	// gsl_blas_zgetp(h, O[2], Id, Hint);
 }

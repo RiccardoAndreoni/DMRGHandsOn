@@ -9,6 +9,7 @@
 #include<vector>
 #include<complex.h>
 #include<gsl/gsl_complex.h>
+#include<gsl/gsl_linalg.h>
 #include<gsl/gsl_matrix_complex_double.h>
 #include<gsl/gsl_blas.h>
 #include<gsl/gsl_complex_math.h>
@@ -81,10 +82,7 @@ class sys
 		model* M;
 		block* L;
 		block* R;
-		double* Hss;					//Site-site interaction Hamiltonian
 		gsl_matrix_complex * GS;		// Ground state of the system
-		gsl_matrix_complex * U;			//Renormalization matrix (U^+HU) 
-		void InitHss();
 
 	public:
 
@@ -97,6 +95,7 @@ class sys
 		// GS computation
 		double compute_GS();
 
+		// Miao
 		void compute_Rmat();
 };
 
