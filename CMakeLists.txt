@@ -25,9 +25,9 @@ add_library(
 
 set(EXECUTABLE_OUTPUT_PATH)
 
-find_package(GSL REQUIRED)
-add_executable(run_DMRG main/run_DMRG.cpp)
-target_link_libraries(run_DMRG common GSL::gsl GSL::gslcblas) # pthread)
+# find_package(GSL REQUIRED)
+# add_executable(run_DMRG main/run_DMRG.cpp)
+# target_link_libraries(run_DMRG common GSL::gsl GSL::gslcblas) # pthread)
 
 #================================================================================================================================
 # Check programs
@@ -43,3 +43,11 @@ target_link_libraries(run_DMRG common GSL::gsl GSL::gslcblas) # pthread)
 # find_package(GSL REQUIRED)
 # add_executable(test_lanczos1 test/test_lanczos1.cpp)
 # target_link_libraries(test_lanczos1 common GSL::gsl GSL::gslcblas) # pthread)
+
+# find_package(GSL REQUIRED)
+# add_executable(test_model test/test_model.cpp)
+# target_link_libraries(test_model common GSL::gsl GSL::gslcblas) # pthread)
+
+find_package(GSL REQUIRED)
+add_executable(test_add_site_LR test/test_add_site_LR.cpp)
+target_link_libraries(test_add_site_LR common GSL::gsl GSL::gslcblas) # pthread)
