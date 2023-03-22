@@ -143,8 +143,10 @@ double sys::compute_GS()
 
 /* SVD and resize -> define RL and RR*/
 
-void sys::compute_Rmat()
+std::pair<gsl_matrix_complex*, gsl_matrix_complex*> sys::compute_Rmat()
 {
+    gsl_matrix_complex* tempRL;
+    gsl_matrix_complex* tempRR;
     // Set dimensions
     int chi_l = L->getChi();
     int chi_r = R->getChi();
@@ -170,14 +172,28 @@ void sys::compute_Rmat()
     // gsl_vector_print(tempS);    // TEST
 
     // Truncation
-    if(tempS->size > chimax)
+    if(tempU->size2 > chimax)
     {
-        //RL = Utruncated
-        //RR = Vtruncated
+        tempRL = gsl_matrix_complex_alloc(tempU->size1, chimax);
+        gsl_matrix_view truncU = gsl_matrix_submatrix(tempU, 0, 0, tempU->size1, chimax);
+        conv_real_comp(tempRL, &truncU.matrix); 
     }
-    else
+    else 
     {
-        //RL = Utemp
-        //RR = Vtemp
+        tempRL = gsl_matrix_complex_alloc(tempU->size1, tempU->size2);
+        conv_real_comp(tempRL, tempU); 
     }
+    if(tempV->size2 > chimax)
+    { 
+        tempRR = gsl_matrix_complex_alloc(tempV->size1, chimax);
+        gsl_matrix_view truncV = gsl_matrix_submatrix(tempV, 0, 0, tempV->size1, chimax);
+        conv_real_comp(tempRR, &truncV.matrix); 
+    }
+    else 
+    {
+        tempRR = gsl_matrix_complex_alloc(tempV->size1, tempV->size2);
+        conv_real_comp(tempRR, tempV);
+    }
+
+    return make_pair(tempRL, tempRR);
 }

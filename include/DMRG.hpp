@@ -7,6 +7,7 @@
 #include<iomanip>
 #include<string>
 #include<vector>
+#include <utility>
 #include<complex.h>
 #include<gsl/gsl_complex.h>
 #include<gsl/gsl_linalg.h>
@@ -14,7 +15,7 @@
 #include<gsl/gsl_blas.h>
 #include<gsl/gsl_complex_math.h>
 #include <lambda_lanczos/lambda_lanczos.hpp>
-#define chimax = 100
+#define chimax 1000
 
 using namespace std;
 
@@ -95,9 +96,10 @@ class sys
 		// GS computation
 		double compute_GS();
 
-		// Miao
-		void compute_Rmat();
+		// Computation of renormalization matrices
+		std::pair<gsl_matrix_complex*, gsl_matrix_complex*> compute_Rmat();
 };
+
 
 class DMRG
 {

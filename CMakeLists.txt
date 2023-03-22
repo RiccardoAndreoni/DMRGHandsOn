@@ -56,6 +56,10 @@ set(EXECUTABLE_OUTPUT_PATH)
 # add_executable(test_convert test/test_convert.cpp)
 # target_link_libraries(test_convert common GSL::gsl GSL::gslcblas) # pthread)
 
+# find_package(GSL REQUIRED)
+# add_executable(test_SVD test/test_SVD.cpp)
+# target_link_libraries(test_SVD common GSL::gsl GSL::gslcblas) # pSVD
+
 find_package(GSL REQUIRED)
-add_executable(test_SVD test/test_SVD.cpp)
-target_link_libraries(test_SVD common GSL::gsl GSL::gslcblas) # pSVD
+add_executable(test_truncation test/test_truncation.cpp)
+target_link_libraries(test_truncation common GSL::gsl GSL::gslcblas) # pthread)
