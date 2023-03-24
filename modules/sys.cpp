@@ -126,6 +126,12 @@ std::pair<gsl_matrix_complex*, gsl_matrix_complex*> sys::compute_Rmat()
     gsl_vector * tempW = gsl_vector_alloc(dim*chi_r);
 
     gsl_linalg_SV_decomp(tempU, tempV, tempS, tempW);
+    
+    cout << "Single values = " << endl; // TEST
+    gsl_vector_print(tempS);            // TEST
+
+    gsl_vector_free(tempS);
+    gsl_vector_free(tempW);
 
     // cout << "U = " << endl;     // TEST
     // gsl_matrix_print(tempU);    // TEST

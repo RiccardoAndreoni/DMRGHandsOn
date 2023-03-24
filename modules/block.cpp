@@ -62,7 +62,7 @@ void block::computeHoR(gsl_matrix_complex * m)
 void block::AddSite()
 {
     int dim = M->getDim();
-    
+
     // Compute Hamiltonian block+site
     gsl_matrix_complex* Htemp = gsl_matrix_complex_calloc(chi*dim, chi*dim);
     switch(pos) 
@@ -77,7 +77,6 @@ void block::AddSite()
             error_message("Block position not allowed in AddSite");
     }
     SetHamiltonian(Htemp);
-    gsl_matrix_complex_free(Htemp);
 
     // Redefine block S -> S*Id
     gsl_matrix_complex* temp;
@@ -127,16 +126,33 @@ void block::AddSite()
     l++;
 }
 
-// void block::EnlargeBlock(model* M, gsl_matrix_complex* ham, gsl_matrix_complex* r)
-// {
+void block::Renormalize(gsl_matrix_complex* R)
+{
+    // Update chi
+    int dim = M->getDim();
+    int old_chi = chi;
+    if(dim*old_chi > chimax) chi = chimax;
+    else chi = old_chi*dim;
 
-//     // Update chi
-//     if(M->getDim()*chi > chimax) chi = chimax;
-//     else chi = chi*M->getDim();
-
-//     // set H to renormalized ham (new hamiltonian for block+site)
-
-
-//     // renormalize old S
-//     // add new S for the new site
-// }
+    // Set H to renormalized ham (new hamiltonian for block+site)
+    gsl_matrix_complex * Hnew = gsl_matrix_complex_calloc(chi, chi);
+    gsl_matrix_complex * temp = gsl_matrix_complex_calloc(chi, old_chi*dim);
+    gsl_blas_zgemm(CblasTrans, CblasNoTrans, gsl_complex_rect(1,0), R, H, gsl_complex_rect(0,0), temp);
+    gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, gsl_complex_rect(1,0), temp, R, gsl_complex_rect(0,0), Hnew);
+    gsl_matrix_complex_free(temp);
+    SetHamiltonian(Hnew);
+    
+    // Renormalize S single site
+    temp = gsl_matrix_complex_calloc(chi, old_chi*dim);
+    gsl_matrix_complex * Snew = gsl_matrix_complex_calloc(chi, chi);
+    for(int i=0; i<l; i++){
+        for(int j=0; j<3; j++)
+        {
+            gsl_blas_zgemm(CblasTrans, CblasNoTrans, gsl_complex_rect(1,0), R, S[i][j], gsl_complex_rect(0,0), temp);
+            gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, gsl_complex_rect(1,0), temp, R, gsl_complex_rect(0,0), Snew);
+            gsl_matrix_complex_free(S[i][j]);
+            S[i][j]=Snew;
+        }
+    }
+    gsl_matrix_complex_free(temp);
+}

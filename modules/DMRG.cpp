@@ -15,9 +15,9 @@
 //     // Measure
 // }
 
-// void DMRG::Infinite(){
+void DMRG::Infinite(){
     
-// }
+}
 
 // DMRG::Infinite()
 // {

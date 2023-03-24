@@ -15,7 +15,8 @@
 #include<gsl/gsl_blas.h>
 #include<gsl/gsl_complex_math.h>
 #include <lambda_lanczos/lambda_lanczos.hpp>
-#define chimax 1000
+
+#define chimax 2
 
 using namespace std;
 
@@ -68,21 +69,21 @@ class block
 
   	public: 
 
-  		block(model *M, char p);							//Default constructor as single site block
+  		block(model *M, char p);	//Default constructor as single site block
 
-  		double* GetHamiltonian();
-  		void Renormalize(model* M, gsl_matrix_complex* ham);
+		/* Renormalize block */
+  		void Renormalize(gsl_matrix_complex* R);
 
-		// Add sites
-		void computeHLo(gsl_matrix_complex * H);	// Add site to the left block to build HLo from HL
-		void computeHoR(gsl_matrix_complex * H);	// Add site to the left block to build HoR from HR
+		/* Add sites */
+		void computeHLo(gsl_matrix_complex* H);	// Build HLo from HL
+		void computeHoR(gsl_matrix_complex* H);	// Build HoR from HR
 		void AddSite();
 
-		// Get parameters
+		/* Get stuff */
 		int getChi() { return chi; }
 		int getl() { return l; }
 		gsl_matrix_complex * getS(size_t site, size_t a){ return S[site][a]; } 
-		gsl_matrix_complex * getH(){ return H; }	//Get O[i]
+		gsl_matrix_complex * getH(){ return H; }	
 };
 
 class sys
@@ -104,6 +105,9 @@ class sys
 
 		// Computation of renormalization matrices
 		std::pair<gsl_matrix_complex*, gsl_matrix_complex*> compute_Rmat();
+
+		// Get stuff
+		gsl_matrix_complex * getGS(){ return GS; }
 };
 
 
@@ -118,9 +122,14 @@ class DMRG
 
 	public: 
 
-		void Infinite(); //Compute gs via Lanczos, reduced density matrix, chi highest eigenvectors, R, Hnew->Hthildenew			
-		void Sweeps();
 		DMRG();
+
+		/* Infinite */
+		void Infinite(); //Compute gs via Lanczos, reduced density matrix, chi highest eigenvectors, R, Hnew->Hthildenew	
+		void LoadRmats(pair<gsl_matrix_complex*, gsl_matrix_complex*>);	
+
+		/* Finite */
+		void Sweeps();
 };
 
 
