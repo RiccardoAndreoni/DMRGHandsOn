@@ -6,40 +6,11 @@
 sys::sys(double Jx_, double Jy_, double Jz_, double h_, int dim_)
 {
     M = new model(Jx_, Jy_, Jz_, h_, dim_);
-    L = new block(M);
-    R = new block(M);
-
-    GS = gsl_matrix_complex_calloc(2,2);
-}
-
-/* Add site to the left block to build HLo from HL */
-
-void sys::computeHLo(gsl_matrix_complex * H)
-{
-    int chi_l = L->getChi();
-    gsl_matrix_complex * Id = gsl_matrix_complex_calloc(chi_l, chi_l);
-    gsl_matrix_complex_set_identity(Id);
-
-    gsl_blas_zgetp(gsl_complex_rect(1, 0), L->getH(), M->getId(), H);
-    gsl_blas_zgetp(gsl_complex_rect(1, 0), Id , M->getHs(), H);
-
-    for(size_t i=0; i<3; i++)
-    { gsl_blas_zgetp(M->getJ(i), L->getS(L->getl()-1, i), M->getO(i), H); }
-}
-
-/* Add site to the left block to build HoR from HR */
-
-void sys::computeHoR(gsl_matrix_complex * H)
-{
-    int chi_r = R->getChi();
-    gsl_matrix_complex * Id = gsl_matrix_complex_calloc(chi_r, chi_r);
-    gsl_matrix_complex_set_identity(Id);
-
-    gsl_blas_zgetp(gsl_complex_rect(1, 0), M->getId(), R->getH(), H);
-    gsl_blas_zgetp(gsl_complex_rect(1, 0), M->getHs(), Id , H);
-
-    for(size_t i=0; i<3; i++)
-    { gsl_blas_zgetp(M->getJ(i), M->getO(i), R->getS(0, i), H); }
+    // cout << "model built" << endl; // TEST
+    L = new block(M, 'l');
+    // cout << "L built" << endl; // TEST
+    R = new block(M, 'r');
+    // cout << "R built" << endl; // TEST
 }
 
 /* GS computation */
@@ -55,12 +26,6 @@ double sys::compute_GS()
     // Allocate GS
     gsl_matrix_complex_free(GS);
     GS = gsl_matrix_complex_calloc(chi_l*dim, dim*chi_r);
-
-    // Define Hlo and Hor starting from HL and HR
-    gsl_matrix_complex * HLo = gsl_matrix_complex_calloc(chi_l*dim, chi_l*dim);
-    computeHLo(HLo);
-    gsl_matrix_complex * HoR = gsl_matrix_complex_calloc(dim*chi_r, dim*chi_r); 
-    computeHoR(HoR);
 
     // cout << "ComputeGS" << endl;    // TEST
     // cout << "HLo = " << endl;       // TEST
@@ -104,9 +69,9 @@ double sys::compute_GS()
         gsl_matrix_complex_free(S_r);
 
         // Hl phi 1r
-        gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, gsl_complex_rect(1,0), HLo, in_mat, gsl_complex_rect(1,0), out_mat);
+        gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, gsl_complex_rect(1,0), L->getH(), in_mat, gsl_complex_rect(1,0), out_mat);
         // 1l phi Hr
-        gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, gsl_complex_rect(1,0), in_mat, HoR, gsl_complex_rect(1,0), out_mat);  
+        gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, gsl_complex_rect(1,0), in_mat, R->getH(), gsl_complex_rect(1,0), out_mat);  
         
         // Reshape out: gsl_matrix -> vector 
         res_mat_vec(out_mat, out);
@@ -115,7 +80,7 @@ double sys::compute_GS()
 
     // // std::vector<double> test_in{1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16};  // TEST
     // std::vector<double> test_in{1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1};            // TEST
-    // // std::vector<double> test_in{0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};            // TEST
+    // std::vector<double> test_in{0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};            // TEST
     // std::vector<double> test_out{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};           // TEST
     // cout << "BEFORE:" << endl;                                                              // TEST
     // for(size_t i=0; i<size(test_out); i++) {cout << test_out[i] << endl;}                   // TEST

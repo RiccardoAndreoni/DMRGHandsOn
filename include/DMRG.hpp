@@ -54,20 +54,29 @@ class block
 {
 	private:
   		
-  		int l;										//Size of the block
-  		int chi; 									//Number of the eigenvectors: min{chimax, d^l}
+  		int l;		//Size of the block
+  		int chi; 	//Number of the eigenvectors: min{chimax, d^l}
+		char pos;	//Position of the block: 'l' left, 'r' right
+		model* M;
 
-  		gsl_matrix_complex * H;						//Hamiltonian
-  		void SetHamiltonian(complex<double>* M);  	//Import the renormalized H (thilde) from system
+  		gsl_matrix_complex * H;							//Hamiltonian
+  		void SetHamiltonian(gsl_matrix_complex* m);  	//Subsitute H with m
 
-		gsl_matrix_complex*** S;					//Renormalized single site operators acting on the whole block space
+		std::vector<gsl_matrix_complex**> S;	//Renormalized single site operators acting on the whole block space
+				//For block L -> S[i] refers to the ith site
+				//For block R -> S is mirrored so S[0]:lth site, S[l-1]:0th site and so on
 
   	public: 
 
-  		block(model *M);							//Default constructor as single site block
+  		block(model *M, char p);							//Default constructor as single site block
 
   		double* GetHamiltonian();
-  		void EnlargeBlock(double* M);				//Substitute H with the new renormalized Hamiltonian
+  		void Renormalize(model* M, gsl_matrix_complex* ham);
+
+		// Add sites
+		void computeHLo(gsl_matrix_complex * H);	// Add site to the left block to build HLo from HL
+		void computeHoR(gsl_matrix_complex * H);	// Add site to the left block to build HoR from HR
+		void AddSite();
 
 		// Get parameters
 		int getChi() { return chi; }
@@ -81,17 +90,14 @@ class sys
 	private: 
 
 		model* M;
-		block* L;
-		block* R;
+
 		gsl_matrix_complex * GS;		// Ground state of the system
 
 	public:
 
+		block* L;
+		block* R;
 		sys(double Jx_, double Jy_, double Jz_, double h_, int dim_);
-
-		// Add sites
-		void computeHLo(gsl_matrix_complex * H);	// Add site to the left block to build HLo from HL
-		void computeHoR(gsl_matrix_complex * H);	// Add site to the left block to build HoR from HR
 
 		// GS computation
 		double compute_GS();

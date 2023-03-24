@@ -48,9 +48,9 @@ set(EXECUTABLE_OUTPUT_PATH)
 # add_executable(test_model test/test_model.cpp)
 # target_link_libraries(test_model common GSL::gsl GSL::gslcblas) # pthread)
 
-# find_package(GSL REQUIRED)
-# add_executable(test_add_site_LR test/test_add_site_LR.cpp)
-# target_link_libraries(test_add_site_LR common GSL::gsl GSL::gslcblas) # pthread)
+find_package(GSL REQUIRED)
+add_executable(test_add_site_LR test/test_add_site_LR.cpp)
+target_link_libraries(test_add_site_LR common GSL::gsl GSL::gslcblas) # pthread)
 
 # find_package(GSL REQUIRED)
 # add_executable(test_convert test/test_convert.cpp)
@@ -60,6 +60,10 @@ set(EXECUTABLE_OUTPUT_PATH)
 # add_executable(test_SVD test/test_SVD.cpp)
 # target_link_libraries(test_SVD common GSL::gsl GSL::gslcblas) # pSVD
 
-find_package(GSL REQUIRED)
-add_executable(test_truncation test/test_truncation.cpp)
-target_link_libraries(test_truncation common GSL::gsl GSL::gslcblas) # pthread)
+# find_package(GSL REQUIRED)
+# add_executable(test_truncation test/test_truncation.cpp)
+# target_link_libraries(test_truncation common GSL::gsl GSL::gslcblas) # pthread)
+
+# find_package(GSL REQUIRED)
+# add_executable(test_pointers1 test/test_pointers1.cpp)
+# target_link_libraries(test_pointers1 common GSL::gsl GSL::gslcblas) # pthread)
