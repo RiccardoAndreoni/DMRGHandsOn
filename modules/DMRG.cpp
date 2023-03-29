@@ -25,8 +25,8 @@ void DMRG::Infinite(){
     R = S->compute_Rmat();
 
     // Store R mats in memory vectors
-    RL.emplace_back(new gsl_matrix_complex*);
-    RR.emplace_back(new gsl_matrix_complex*);
+    RL.emplace_back(new gsl_matrix_complex);
+    RR.emplace_back(new gsl_matrix_complex);
     RL[RL.size() -1] = R.first;
     RR[RR.size() -1] = R.second;
 
