@@ -16,7 +16,22 @@
 // }
 
 void DMRG::Infinite(){
+    // Add sites
     
+    // Compute GS
+
+    // Compute renormalization matrices
+    std::pair<gsl_matrix_complex*, gsl_matrix_complex*> R;
+    R = S->compute_Rmat();
+
+    // Store R mats in memory vectors
+    RL.emplace_back(new gsl_matrix_complex*);
+    RR.emplace_back(new gsl_matrix_complex*);
+    RL[RL.size() -1] = R.first;
+    RR[RR.size() -1] = R.second;
+
+    // Renormalize
+
 }
 
 // DMRG::Infinite()

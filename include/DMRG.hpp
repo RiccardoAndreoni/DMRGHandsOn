@@ -20,7 +20,7 @@
 
 using namespace std;
 
-// Classes
+/******************* Classes *******************/
 
 class model
 {
@@ -91,13 +91,13 @@ class sys
 	private: 
 
 		model* M;
+		block* L;
+		block* R;
 
 		gsl_matrix_complex * GS;		// Ground state of the system
 
 	public:
 
-		block* L;
-		block* R;
 		sys(double Jx_, double Jy_, double Jz_, double h_, int dim_);
 
 		// GS computation
@@ -108,6 +108,8 @@ class sys
 
 		// Get stuff
 		gsl_matrix_complex * getGS(){ return GS; }
+		block* getL(){ return L; }
+		block* getR(){ return R; }
 };
 
 
@@ -116,7 +118,7 @@ class DMRG
 
 	private: 
 
-		sys S;
+		sys *S;
 		std::vector<gsl_matrix_complex*> RL;
 		std::vector<gsl_matrix_complex*> RR;
 

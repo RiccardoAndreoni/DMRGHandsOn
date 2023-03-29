@@ -13,27 +13,17 @@ sys::sys(double Jx_, double Jy_, double Jz_, double h_, int dim_)
     // cout << "R built" << endl; // TEST
 }
 
-/* GS computation */
+/****** GS computation ******/
 
 double sys::compute_GS()
 {
-    // Set dimensions
+    /****** Set dimensions ******/
     int chi_l = L->getChi();
     int chi_r = R->getChi();
     int dim = M->getDim();
     int n = dim*dim*chi_l*chi_r;
 
-    // Allocate GS
-    gsl_matrix_complex_free(GS);
-    GS = gsl_matrix_complex_calloc(chi_l*dim, dim*chi_r);
-
-    // cout << "ComputeGS" << endl;    // TEST
-    // cout << "HLo = " << endl;       // TEST
-    // gsl_matrix_complex_print(HLo);  // TEST
-    // cout << "HoR = " << endl;       // TEST
-    // gsl_matrix_complex_print(HoR);  // TEST
-
-    // Define mv_mul
+    /****** Define mv_mul ******/
     auto mv_mul = [&](const std::vector<double>& in, std::vector<double>& out) 
     {
         gsl_matrix_complex * in_mat = gsl_matrix_complex_calloc(chi_l*dim, dim*chi_r);
@@ -90,7 +80,11 @@ double sys::compute_GS()
     // for(size_t i=0; i<size(test_out); i++) {cout << test_out[i] << endl;}                   // TEST
     // cout << endl;                                                                           // TEST
 
-    // Lanczos
+    /****** Allocate GS ******/
+    gsl_matrix_complex_free(GS);
+    GS = gsl_matrix_complex_calloc(chi_l*dim, dim*chi_r);
+
+    /****** Lanczos ******/
     lambda_lanczos::LambdaLanczos<double> engine(mv_mul, n, false, 1); 
     std::vector<double> eigenvalues;
     std::vector<std::vector<double>> eigenvectors;
@@ -106,19 +100,19 @@ double sys::compute_GS()
     return eigenvalues[0];
 }
 
-/* SVD and resize -> define RL and RR*/
+/****** SVD and resize -> define RL and RR ******/
 
 std::pair<gsl_matrix_complex*, gsl_matrix_complex*> sys::compute_Rmat()
 {
     gsl_matrix_complex* tempRL;
     gsl_matrix_complex* tempRR;
-    // Set dimensions
+    /****** Set dimensions ******/
     int chi_l = L->getChi();
     int chi_r = R->getChi();
     int dim = M->getDim();
     // int n = dim*dim*chi_l*chi_r;
 
-    // Definition of temporary U and V, to be truncated after SVD
+    /****** Definition of temporary U and V, to be truncated after SVD ******/
     gsl_matrix * tempU = gsl_matrix_alloc(chi_l*dim, dim*chi_r);
     conv_comp_real(tempU, GS);
     gsl_matrix * tempV = gsl_matrix_alloc(dim*chi_r, dim*chi_r);
@@ -142,7 +136,7 @@ std::pair<gsl_matrix_complex*, gsl_matrix_complex*> sys::compute_Rmat()
     // cout << "S = " << endl;     // TEST
     // gsl_vector_print(tempS);    // TEST
 
-    // Truncation
+    /****** Truncation ******/
     if(tempU->size2 > chimax)
     {
         tempRL = gsl_matrix_complex_alloc(tempU->size1, chimax);

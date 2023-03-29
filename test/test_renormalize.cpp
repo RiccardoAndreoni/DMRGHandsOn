@@ -3,22 +3,20 @@
 #include "DMRG.hpp"
 #include "service.hpp"
 
-// Move the blocks L and R to public in sys to run this code
-
 int main(){
 
     std::pair<gsl_matrix_complex*, gsl_matrix_complex*> Rs;
     sys * SYS = new sys(1,2,3,4,2);
 
-    SYS->L->AddSite();
-    SYS->R->AddSite();
+    SYS->getL()->AddSite();
+    SYS->getR()->AddSite();
 
     cout << "########################" << endl;
     cout << "HLo =" << endl;
-    gsl_matrix_complex_print(SYS->L->getH());
+    gsl_matrix_complex_print(SYS->getL()->getH());
     cout << endl;
     cout << "HoR =" << endl;
-    gsl_matrix_complex_print(SYS->R->getH());
+    gsl_matrix_complex_print(SYS->getR()->getH());
     cout << endl;
 
     ////////////////////////////////////////////
@@ -52,13 +50,13 @@ int main(){
     cout << "Renormalized Hamiltonians:" << endl;
     cout << endl;
 
-    SYS->L->Renormalize(Rs.first);
-    SYS->R->Renormalize(Rs.second);
+    SYS->getL()->Renormalize(Rs.first);
+    SYS->getR()->Renormalize(Rs.second);
     
     cout << "HL = " << endl;
-    gsl_matrix_complex_print(SYS->L->getH());
+    gsl_matrix_complex_print(SYS->getL()->getH());
     cout << "HR = " << endl;
-    gsl_matrix_complex_print(SYS->R->getH());
+    gsl_matrix_complex_print(SYS->getR()->getH());
 
     return 0;
 }
