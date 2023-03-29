@@ -60,7 +60,7 @@ int  gsl_blas_zgetp (const gsl_complex alpha,
 	const size_t rC = C->size1;
 	const size_t cC = C->size2;
 	if(rC != rA*rB) if(cC != cA*cB) 
-	{ error_message("C is "+to_string(rC)+"x"+to_string(cC)+", should be "+to_string(rA*rB)+"x"+to_string(cA*cB)); }
+	{ error_message("C is "+to_string(rC)+"x"+to_string(cC)+", should be "+to_string(rA)+"*"+to_string(rB)+"x"+to_string(cA)+"*"+to_string(cB)); }
 
 	// Set elements
 	for (size_t i=0; i<rC ; ++i){

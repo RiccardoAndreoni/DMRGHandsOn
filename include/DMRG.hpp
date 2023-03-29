@@ -121,10 +121,11 @@ class DMRG
 		sys *S;
 		std::vector<gsl_matrix_complex*> RL;
 		std::vector<gsl_matrix_complex*> RR;
+		double Egs;
 
 	public: 
 
-		DMRG();
+		DMRG(double Jx_, double Jy_, double Jz_, double h_, int dim_);
 
 		/* Infinite */
 		void Infinite(); //Compute gs via Lanczos, reduced density matrix, chi highest eigenvectors, R, Hnew->Hthildenew	
@@ -132,6 +133,10 @@ class DMRG
 
 		/* Finite */
 		void Sweeps();
+
+		/*Return Egs*/
+		double getEgs(){return Egs;}
+		sys* getSYS(){ return S; }
 };
 
 

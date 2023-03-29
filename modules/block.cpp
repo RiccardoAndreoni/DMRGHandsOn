@@ -62,7 +62,8 @@ void block::computeHoR(gsl_matrix_complex * m)
 void block::AddSite()
 {
     int dim = M->getDim();
-
+    
+    // cout << "1" << endl;
     // Compute Hamiltonian block+site
     gsl_matrix_complex* Htemp = gsl_matrix_complex_calloc(chi*dim, chi*dim);
     switch(pos) 
@@ -78,13 +79,19 @@ void block::AddSite()
     }
     SetHamiltonian(Htemp);
 
+    // cout << "2" << endl;
     // Redefine block S -> S*Id
+    // gsl_matrix_complex_print(S[0][1]);
+    // cout << S[0][1]->size1 << "'" << S[0][1]->size2 << endl;
+
     gsl_matrix_complex* temp;
     for(int i=0; i<l; i++)
     {
         for(size_t j=0; j<3; j++)
         {
+            // cout << j << ":" << S[i][j]->size1 << "'" << S[i][j]->size2 << endl;
             temp = S[i][j];
+            // cout << j << ":" << temp->size1 << "'" << temp->size2 << endl;
             S[i][j] = gsl_matrix_complex_calloc(chi*dim, chi*dim);
             switch(pos) 
             {
@@ -100,6 +107,7 @@ void block::AddSite()
         }
     }
 
+    // cout << "3" << endl;
     // Add new site's S
     gsl_matrix_complex* Id = gsl_matrix_complex_alloc(chi, chi);
     gsl_matrix_complex_set_identity(Id);
