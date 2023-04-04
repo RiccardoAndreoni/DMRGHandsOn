@@ -68,15 +68,15 @@ set(EXECUTABLE_OUTPUT_PATH)
 # add_executable(test_pointers1 test/test_pointers1.cpp)
 # target_link_libraries(test_pointers1 common GSL::gsl GSL::gslcblas) # pthread)
 
-find_package(GSL REQUIRED)
-add_executable(test_renormalize test/test_renormalize.cpp)
-target_link_libraries(test_renormalize common GSL::gsl GSL::gslcblas) # pthread)
+# find_package(GSL REQUIRED)
+# add_executable(test_renormalize test/test_renormalize.cpp)
+# target_link_libraries(test_renormalize common GSL::gsl GSL::gslcblas) # pthread)
 
 # find_package(GSL REQUIRED)
 # add_executable(test_lanczos2 test/test_lanczos2.cpp)
 # target_link_libraries(test_lanczos2 common GSL::gsl GSL::gslcblas) # pthread)
 
 
-# find_package(GSL REQUIRED)
-# add_executable(test_infinite test/test_infinite.cpp)
-# target_link_libraries(test_infinite common GSL::gsl GSL::gslcblas) # pthread)
+find_package(GSL REQUIRED)
+add_executable(test_infinite test/test_infinite.cpp)
+target_link_libraries(test_infinite common GSL::gsl GSL::gslcblas) # pthread)

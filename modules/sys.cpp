@@ -10,6 +10,7 @@ sys::sys(double Jx_, double Jy_, double Jz_, double h_, int dim_)
     L = new block(M, 'l');
     // cout << "L built" << endl; // TEST
     R = new block(M, 'r');
+    //R = new block(M, 'l');
     // cout << "R built" << endl; // TEST
 }
 

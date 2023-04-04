@@ -1,0 +1,4 @@
+/u/i/ipasqua/collura/DMRGHandsOn/CMakeFiles/rebuild_cache.dir
+/u/i/ipasqua/collura/DMRGHandsOn/CMakeFiles/edit_cache.dir
+/u/i/ipasqua/collura/DMRGHandsOn/CMakeFiles/test_infinite.dir
+/u/i/ipasqua/collura/DMRGHandsOn/CMakeFiles/common.dir

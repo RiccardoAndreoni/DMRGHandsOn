@@ -1,0 +1,1 @@
+/opt/ohpc/pub/compiler/gcc/12.2.0/bin/c++ -Wfatal-errors -Wparentheses -Wall -Wextra -Wpedantic -Wconversion -Werror -pedantic -std=c++17 -O3 -rdynamic CMakeFiles/test_infinite.dir/test/test_infinite.cpp.o -o test_infinite  libcommon.a /usr/lib64/libgsl.so /usr/lib64/libgslcblas.so 

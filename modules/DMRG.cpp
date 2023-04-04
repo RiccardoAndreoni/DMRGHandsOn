@@ -19,18 +19,14 @@
 void DMRG::Infinite(){
 
 
-    cout << "here zero "  << endl;
 
     // Add sites
     S->getL()->AddSite();
     S->getR()->AddSite();
-
-    cout << "here one "  << endl;
+    
 
     // Compute GS
     Egs = S->compute_GS();
-
-    cout << "here two "  << endl;
 
     // Compute renormalization matrices
     std::pair<gsl_matrix_complex*, gsl_matrix_complex*> R;

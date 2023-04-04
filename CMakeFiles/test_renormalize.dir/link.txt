@@ -1,0 +1,1 @@
+/opt/ohpc/pub/compiler/gcc/12.2.0/bin/c++ -Wfatal-errors -Wparentheses -Wall -Wextra -Wpedantic -Wconversion -Werror -pedantic -std=c++17 -O3 -rdynamic CMakeFiles/test_renormalize.dir/test/test_renormalize.cpp.o -o test_renormalize  libcommon.a /usr/lib64/libgsl.so /usr/lib64/libgslcblas.so 
