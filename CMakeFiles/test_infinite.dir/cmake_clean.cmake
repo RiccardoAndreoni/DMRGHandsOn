@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/test_infinite.dir/test/test_infinite.cpp.o"
-  "CMakeFiles/test_infinite.dir/test/test_infinite.cpp.o.d"
   "test_infinite"
   "test_infinite.pdb"
 )

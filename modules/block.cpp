@@ -56,7 +56,6 @@ void block::computeHLo(gsl_matrix_complex * m)
      
      for(size_t i=0; i<3; i++)
      { gsl_blas_zgetp(M->getJ(i), M->getO(i), S[l-1][i], m); }
-     // { gsl_blas_zgetp(M->getJ(i), M->getO(i), S[0][i], m); }
  }
 
 void block::AddSite()
@@ -111,19 +110,18 @@ void block::AddSite()
     // Add new site's S
     gsl_matrix_complex* Id = gsl_matrix_complex_alloc(chi, chi);
     gsl_matrix_complex_set_identity(Id);
+    S.emplace_back(new gsl_matrix_complex*[3]);
     switch(pos) 
     {
         case 'l':
             for(size_t i=0; i<3; i++)
             {
-                S.emplace_back(new gsl_matrix_complex*[3]);
                 S[l][i] = gsl_matrix_complex_calloc(dim*chi, dim*chi);
                 gsl_blas_zgetp(gsl_complex_rect(1,0), Id, M->getO(i), S[l][i]);
             } break;
         case 'r':
             for(size_t i=0; i<3; i++)
             {
-                S.emplace_back(new gsl_matrix_complex*[3]);
                 S[l][i] = gsl_matrix_complex_calloc(dim*chi, dim*chi);
                 gsl_blas_zgetp(gsl_complex_rect(1,0), M->getO(i), Id, S[l][i]);
             } break;

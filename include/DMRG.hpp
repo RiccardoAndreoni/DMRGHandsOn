@@ -16,7 +16,7 @@
 #include<gsl/gsl_complex_math.h>
 #include <lambda_lanczos/lambda_lanczos.hpp>
 
-#define chimax 4
+#define chimax 6
 
 using namespace std;
 

@@ -68,7 +68,7 @@ int  gsl_blas_zgetp (const gsl_complex alpha,
 			gsl_matrix_complex_set(C, i, j, 
 									gsl_complex_add(gsl_matrix_complex_get(C, i, j),
 													gsl_complex_mul(alpha, 	
-																	gsl_complex_mul(gsl_matrix_complex_get(A, i/rA, j/cA), 
+																	gsl_complex_mul(gsl_matrix_complex_get(A, i/rB, j/cB), 
 																					gsl_matrix_complex_get(B, i%rB, j%cB))))
 									);
 		}

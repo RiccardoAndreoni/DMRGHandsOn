@@ -1,18 +1,20 @@
-
-# Consider dependencies only in project.
-set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
-
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
+  "CXX"
   )
+# The set of files for implicit dependencies of each language:
+set(CMAKE_DEPENDS_CHECK_CXX
+  "/home/diego/Downloads/DMRGHandsOn/modules/DMRG.cpp" "/home/diego/Downloads/DMRGHandsOn/CMakeFiles/common.dir/modules/DMRG.cpp.o"
+  "/home/diego/Downloads/DMRGHandsOn/modules/block.cpp" "/home/diego/Downloads/DMRGHandsOn/CMakeFiles/common.dir/modules/block.cpp.o"
+  "/home/diego/Downloads/DMRGHandsOn/modules/model.cpp" "/home/diego/Downloads/DMRGHandsOn/CMakeFiles/common.dir/modules/model.cpp.o"
+  "/home/diego/Downloads/DMRGHandsOn/modules/service.cpp" "/home/diego/Downloads/DMRGHandsOn/CMakeFiles/common.dir/modules/service.cpp.o"
+  "/home/diego/Downloads/DMRGHandsOn/modules/sys.cpp" "/home/diego/Downloads/DMRGHandsOn/CMakeFiles/common.dir/modules/sys.cpp.o"
+  )
+set(CMAKE_CXX_COMPILER_ID "GNU")
 
-# The set of dependency files which are needed:
-set(CMAKE_DEPENDS_DEPENDENCY_FILES
-  "/u/i/ipasqua/collura/DMRGHandsOn/modules/DMRG.cpp" "CMakeFiles/common.dir/modules/DMRG.cpp.o" "gcc" "CMakeFiles/common.dir/modules/DMRG.cpp.o.d"
-  "/u/i/ipasqua/collura/DMRGHandsOn/modules/block.cpp" "CMakeFiles/common.dir/modules/block.cpp.o" "gcc" "CMakeFiles/common.dir/modules/block.cpp.o.d"
-  "/u/i/ipasqua/collura/DMRGHandsOn/modules/model.cpp" "CMakeFiles/common.dir/modules/model.cpp.o" "gcc" "CMakeFiles/common.dir/modules/model.cpp.o.d"
-  "/u/i/ipasqua/collura/DMRGHandsOn/modules/service.cpp" "CMakeFiles/common.dir/modules/service.cpp.o" "gcc" "CMakeFiles/common.dir/modules/service.cpp.o.d"
-  "/u/i/ipasqua/collura/DMRGHandsOn/modules/sys.cpp" "CMakeFiles/common.dir/modules/sys.cpp.o" "gcc" "CMakeFiles/common.dir/modules/sys.cpp.o.d"
+# The include file search paths:
+set(CMAKE_CXX_TARGET_INCLUDE_PATH
+  "include"
   )
 
 # Targets to which this target links.

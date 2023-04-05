@@ -7,7 +7,7 @@ int main(){
 
 
 
-    DMRG * dmrg = new DMRG(1,2,3,4,3);
+    DMRG * dmrg = new DMRG(1,2,3,4,2);
     
     dmrg -> Infinite();
     double En;
