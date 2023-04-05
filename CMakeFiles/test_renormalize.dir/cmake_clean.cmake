@@ -1,6 +1,5 @@
 file(REMOVE_RECURSE
   "CMakeFiles/test_renormalize.dir/test/test_renormalize.cpp.o"
-  "CMakeFiles/test_renormalize.dir/test/test_renormalize.cpp.o.d"
   "test_renormalize"
   "test_renormalize.pdb"
 )

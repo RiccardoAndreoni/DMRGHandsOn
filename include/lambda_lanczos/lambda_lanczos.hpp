@@ -79,14 +79,15 @@ public:
    * the range of [-1, 1].
    */
   static void init(std::vector<T>& v) {
-    std::random_device dev;
-    std::mt19937 mt(dev());
+    // std::random_device dev;
+    int RandSeed = 7;
+    std::mt19937 mt(RandSeed);
     std::uniform_real_distribution<T> rand((T)(-1.0), (T)(1.0));
 
     size_t n = v.size();
     for(size_t i = 0; i < n; ++i) {
-      //v[i] = rand(mt); 
-      v[i] = 1.0 ;  // TEST
+      v[i] = rand(mt); 
+      // v[i] = 1.0 ;  // TEST
     }
   }
 };
@@ -96,14 +97,15 @@ template <typename T>
 struct VectorRandomInitializer<std::complex<T>> {
 public:
   static void init(std::vector<std::complex<T>>& v) {
-    std::random_device dev;
-    std::mt19937 mt(dev());
+    // std::random_device dev;
+    int RandSeed = 7;
+    std::mt19937 mt(RandSeed);
     std::uniform_real_distribution<T> rand((T)(-1.0), (T)(1.0));
 
     size_t n = v.size();
     for(size_t i = 0; i < n; ++i) {
-      // v[i] = std::complex<T>(rand(mt), rand(mt));
-      v[i] = std::complex<T>(1, 1);   // TEST  
+      v[i] = std::complex<T>(rand(mt), rand(mt));
+      // v[i] = std::complex<T>(1, 1);   // TEST  
     }
   }
 };

@@ -111,17 +111,17 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named test_infinite
+# Target rules for targets named test_renormalize
 
 # Build rule for target.
-test_infinite: cmake_check_build_system
-	$(MAKE) -f CMakeFiles/Makefile2 test_infinite
-.PHONY : test_infinite
+test_renormalize: cmake_check_build_system
+	$(MAKE) -f CMakeFiles/Makefile2 test_renormalize
+.PHONY : test_renormalize
 
 # fast build rule for target.
-test_infinite/fast:
-	$(MAKE) -f CMakeFiles/test_infinite.dir/build.make CMakeFiles/test_infinite.dir/build
-.PHONY : test_infinite/fast
+test_renormalize/fast:
+	$(MAKE) -f CMakeFiles/test_renormalize.dir/build.make CMakeFiles/test_renormalize.dir/build
+.PHONY : test_renormalize/fast
 
 #=============================================================================
 # Target rules for targets named common
@@ -271,32 +271,32 @@ modules/sys.cpp.s:
 	$(MAKE) -f CMakeFiles/common.dir/build.make CMakeFiles/common.dir/modules/sys.cpp.s
 .PHONY : modules/sys.cpp.s
 
-test/test_infinite.o: test/test_infinite.cpp.o
+test/test_renormalize.o: test/test_renormalize.cpp.o
 
-.PHONY : test/test_infinite.o
+.PHONY : test/test_renormalize.o
 
 # target to build an object file
-test/test_infinite.cpp.o:
-	$(MAKE) -f CMakeFiles/test_infinite.dir/build.make CMakeFiles/test_infinite.dir/test/test_infinite.cpp.o
-.PHONY : test/test_infinite.cpp.o
+test/test_renormalize.cpp.o:
+	$(MAKE) -f CMakeFiles/test_renormalize.dir/build.make CMakeFiles/test_renormalize.dir/test/test_renormalize.cpp.o
+.PHONY : test/test_renormalize.cpp.o
 
-test/test_infinite.i: test/test_infinite.cpp.i
+test/test_renormalize.i: test/test_renormalize.cpp.i
 
-.PHONY : test/test_infinite.i
+.PHONY : test/test_renormalize.i
 
 # target to preprocess a source file
-test/test_infinite.cpp.i:
-	$(MAKE) -f CMakeFiles/test_infinite.dir/build.make CMakeFiles/test_infinite.dir/test/test_infinite.cpp.i
-.PHONY : test/test_infinite.cpp.i
+test/test_renormalize.cpp.i:
+	$(MAKE) -f CMakeFiles/test_renormalize.dir/build.make CMakeFiles/test_renormalize.dir/test/test_renormalize.cpp.i
+.PHONY : test/test_renormalize.cpp.i
 
-test/test_infinite.s: test/test_infinite.cpp.s
+test/test_renormalize.s: test/test_renormalize.cpp.s
 
-.PHONY : test/test_infinite.s
+.PHONY : test/test_renormalize.s
 
 # target to generate assembly for a file
-test/test_infinite.cpp.s:
-	$(MAKE) -f CMakeFiles/test_infinite.dir/build.make CMakeFiles/test_infinite.dir/test/test_infinite.cpp.s
-.PHONY : test/test_infinite.cpp.s
+test/test_renormalize.cpp.s:
+	$(MAKE) -f CMakeFiles/test_renormalize.dir/build.make CMakeFiles/test_renormalize.dir/test/test_renormalize.cpp.s
+.PHONY : test/test_renormalize.cpp.s
 
 # Help Target
 help:
@@ -306,7 +306,7 @@ help:
 	@echo "... depend"
 	@echo "... rebuild_cache"
 	@echo "... edit_cache"
-	@echo "... test_infinite"
+	@echo "... test_renormalize"
 	@echo "... common"
 	@echo "... modules/DMRG.o"
 	@echo "... modules/DMRG.i"
@@ -323,9 +323,9 @@ help:
 	@echo "... modules/sys.o"
 	@echo "... modules/sys.i"
 	@echo "... modules/sys.s"
-	@echo "... test/test_infinite.o"
-	@echo "... test/test_infinite.i"
-	@echo "... test/test_infinite.s"
+	@echo "... test/test_renormalize.o"
+	@echo "... test/test_renormalize.i"
+	@echo "... test/test_renormalize.s"
 .PHONY : help
 
 

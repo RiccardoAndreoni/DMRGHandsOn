@@ -1,4 +1,4 @@
 /home/diego/Downloads/DMRGHandsOn/CMakeFiles/rebuild_cache.dir
 /home/diego/Downloads/DMRGHandsOn/CMakeFiles/edit_cache.dir
-/home/diego/Downloads/DMRGHandsOn/CMakeFiles/test_infinite.dir
+/home/diego/Downloads/DMRGHandsOn/CMakeFiles/test_renormalize.dir
 /home/diego/Downloads/DMRGHandsOn/CMakeFiles/common.dir
