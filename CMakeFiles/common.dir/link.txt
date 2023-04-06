@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcommon.a  CMakeFiles/common.dir/modules/block.cpp.o CMakeFiles/common.dir/modules/sys.cpp.o CMakeFiles/common.dir/modules/model.cpp.o CMakeFiles/common.dir/modules/DMRG.cpp.o CMakeFiles/common.dir/modules/service.cpp.o
+/usr/bin/ranlib libcommon.a

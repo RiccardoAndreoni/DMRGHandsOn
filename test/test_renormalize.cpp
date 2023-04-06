@@ -47,16 +47,41 @@ int main(){
     ////////////////////////////////////////////
 
     cout << "########################" << endl;
-    cout << "Renormalized Hamiltonians:" << endl;
-    cout << endl;
+    cout << "Enlarged spin operators:" << endl;
+    cout << "Sx:" << endl;
+    gsl_matrix_complex_print(SYS->getL()->getS(0, 0));
+    cout << "Sy:" << endl;
+    gsl_matrix_complex_print(SYS->getL()->getS(0, 1));
+    cout << "Sz:" << endl;
+    gsl_matrix_complex_print(SYS->getL()->getS(0, 2));
 
-    SYS->getL()->Renormalize(Rs.first);
-    SYS->getR()->Renormalize(Rs.second);
-    
-    cout << "HL = " << endl;
-    gsl_matrix_complex_print(SYS->getL()->getH());
-    cout << "HR = " << endl;
-    gsl_matrix_complex_print(SYS->getR()->getH());
+    ////////////////////////////////////////////
+
+     cout << "########################" << endl;
+     cout << "Renormalized Hamiltonians:" << endl;
+     cout << endl;
+     
+     SYS->getL()->Renormalize(Rs.first);
+     SYS->getR()->Renormalize(Rs.second);
+     
+     cout << "HL = " << endl;
+     gsl_matrix_complex_print(SYS->getL()->getH());
+     cout << "HR = " << endl;
+     gsl_matrix_complex_print(SYS->getR()->getH());
+
+    ////////////////////////////////////////////
+
+    cout << "########################" << endl;
+    cout << "Renormalized spin operators:" << endl;
+    cout << "Sx:" << endl;
+    gsl_matrix_complex_print(SYS->getL()->getS(0, 0));
+    cout << "Sy:" << endl;
+    gsl_matrix_complex_print(SYS->getL()->getS(0, 1));
+    cout << "Sz:" << endl;
+    gsl_matrix_complex_print(SYS->getL()->getS(0, 2));
+
+
+
 
     return 0;
 }

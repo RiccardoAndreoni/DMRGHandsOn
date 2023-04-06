@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wfatal-errors -Wparentheses -Wall -Wextra -Wpedantic -Wconversion -Werror -pedantic -std=c++17 -O3  -rdynamic CMakeFiles/test_renormalize.dir/test/test_renormalize.cpp.o  -o test_renormalize  libcommon.a /usr/lib/x86_64-linux-gnu/libgsl.so /usr/lib/x86_64-linux-gnu/libgslcblas.so 

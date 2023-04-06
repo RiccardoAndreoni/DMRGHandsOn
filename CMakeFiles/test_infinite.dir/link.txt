@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wfatal-errors -Wparentheses -Wall -Wextra -Wpedantic -Wconversion -Werror -pedantic -std=c++17 -O3  -rdynamic CMakeFiles/test_infinite.dir/test/test_infinite.cpp.o  -o test_infinite  libcommon.a /usr/lib/x86_64-linux-gnu/libgsl.so /usr/lib/x86_64-linux-gnu/libgslcblas.so 
