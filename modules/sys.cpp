@@ -42,7 +42,7 @@ double sys::compute_GS()
         gsl_matrix_complex_set_identity(Id_r);
 
         gsl_matrix_complex * temp = gsl_matrix_complex_calloc(chi_l*dim, dim*chi_r);
-        for(size_t i=0; i<3; i++){ // Start from 1 bc we need only Sx, Sy, Sz and not Id in O[]
+        for(size_t i=0; i<3; i++){ 
             gsl_blas_zgetp(gsl_complex_rect(1,0), Id_l, M->getO(i), S_l);
             gsl_blas_zgetp(gsl_complex_rect(1,0), M->getO(i), Id_r, S_r);
             gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, M->getJ(i), S_l, in_mat, gsl_complex_rect(0,0), temp);
@@ -121,8 +121,10 @@ std::pair<gsl_matrix_complex*, gsl_matrix_complex*> sys::compute_Rmat()
 
     gsl_linalg_SV_decomp(tempU, tempV, tempS, tempW);
     
-    //cout << "Single values = " << endl; // TEST
-    //gsl_vector_print(tempS);            // TEST
+    cout << "########################" << endl; //TEST
+    cout << "Singular values = " << endl; // TEST
+    gsl_vector_print(tempS);            // TEST
+    cout << endl;                        //TEST
 
     gsl_vector_free(tempS);
     gsl_vector_free(tempW);

@@ -25,9 +25,9 @@ block::block(model *M, char p){
     }
 }
 
-void block::SetHamiltonian(gsl_matrix_complex * m)
+void block::SetHamiltonian(gsl_matrix_complex * m, bool freemem)
 {
-    gsl_matrix_complex_free(H);
+    if(freemem) gsl_matrix_complex_free(H);
     H = m;
 }
 
@@ -62,7 +62,7 @@ void block::AddSite()
 {
     int dim = M->getDim();
     
-    cout << "1" << endl;
+   // cout << "1" << endl;
     // Compute Hamiltonian block+site
     gsl_matrix_complex* Htemp = gsl_matrix_complex_calloc(chi*dim, chi*dim);
     switch(pos) 
@@ -76,9 +76,10 @@ void block::AddSite()
         default:
             error_message("Block position not allowed in AddSite");
     }
-    SetHamiltonian(Htemp);
+    SetHamiltonian(Htemp, false);   // DON'T FREE MEMORY ABT THE HAMILTONIAN: 
+                                    // we need to store the renormalized one for the finite part
 
-    cout << "2" << endl;
+    //cout << "2" << endl;
     // Redefine block S -> S*Id
     // gsl_matrix_complex_print(S[0][1]);
     // cout << S[0][1]->size1 << "'" << S[0][1]->size2 << endl;
@@ -106,7 +107,7 @@ void block::AddSite()
         }
     }
 
-    cout << "3" << endl;
+    //cout << "3" << endl;
     // Add new site's S
     gsl_matrix_complex* Id = gsl_matrix_complex_alloc(chi, chi);
     gsl_matrix_complex_set_identity(Id);
@@ -146,7 +147,7 @@ void block::Renormalize(gsl_matrix_complex* R)
     gsl_blas_zgemm(CblasTrans, CblasNoTrans, gsl_complex_rect(1,0), R, H, gsl_complex_rect(0,0), temp);
     gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, gsl_complex_rect(1,0), temp, R, gsl_complex_rect(0,0), Hnew);
     gsl_matrix_complex_free(temp);
-    SetHamiltonian(Hnew);
+    SetHamiltonian(Hnew, true); // we don't need info about the nonrenormalized Ham
     
     // Renormalize S single site
     gsl_matrix_complex * temp2 = gsl_matrix_complex_calloc(chi, old_chi*dim);

@@ -42,6 +42,20 @@ void DMRG::Infinite(){
     S->getL()->Renormalize(R.first);
     S->getR()->Renormalize(R.second);
 
+    // Store H mats in memory vectors 
+    
+    // gsl_matrix_complex * HtempL= gsl_matrix_complex_alloc(S->getL()->getChi(), S->getL()->getChi());
+    // gsl_matrix_complex * HtempR= gsl_matrix_complex_alloc(S->getR()->getChi(), S->getR()->getChi());
+     
+    // HtempL=S->getL()->getH();
+    // HtempR=S->getR()->getH();
+
+    HL.emplace_back(new gsl_matrix_complex);
+    HR.emplace_back(new gsl_matrix_complex);
+    HL[HL.size() -1] = S->getL()->getH();
+    HR[HR.size() -1] = S->getR()->getH();
+
+
 }
 
 // DMRG::Finite()

@@ -16,7 +16,7 @@
 #include<gsl/gsl_complex_math.h>
 #include <lambda_lanczos/lambda_lanczos.hpp>
 
-#define chimax 6
+#define chimax 4
 
 using namespace std;
 
@@ -61,7 +61,7 @@ class block
 		model* M;
 
   		gsl_matrix_complex * H;							//Hamiltonian
-  		void SetHamiltonian(gsl_matrix_complex* m);  	//Subsitute H with m
+  		void SetHamiltonian(gsl_matrix_complex* m, bool freemem);  	//Subsitute H with m
 
 		std::vector<gsl_matrix_complex**> S;	//Renormalized single site operators acting on the whole block space
 				//For block L -> S[i] refers to the ith site
@@ -121,6 +121,9 @@ class DMRG
 		sys *S;
 		std::vector<gsl_matrix_complex*> RL;
 		std::vector<gsl_matrix_complex*> RR;
+		std::vector<gsl_matrix_complex*> HL;
+		std::vector<gsl_matrix_complex*> HR;
+
 		double Egs;
 
 	public: 
@@ -137,6 +140,12 @@ class DMRG
 		/*Return Egs*/
 		double getEgs(){return Egs;}
 		sys* getSYS(){ return S; }
+
+		std::vector<gsl_matrix_complex*> getHL(){return HL;}
+		std::vector<gsl_matrix_complex*> getHR(){return HR;}
+		std::vector<gsl_matrix_complex*> getRL(){return RL;}
+		std::vector<gsl_matrix_complex*> getRR(){return RR;}
+
 };
 
 

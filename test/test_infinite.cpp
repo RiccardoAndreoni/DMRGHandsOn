@@ -9,39 +9,70 @@ int main(){
 
     DMRG * dmrg = new DMRG(1,2,3,4,2);
     
-    dmrg -> Infinite();
     double En;
+
+    std::vector<gsl_matrix_complex*> HmatsR;
+    std::vector<gsl_matrix_complex*> HmatsL;
+    std::vector<gsl_matrix_complex*> RmatsR;
+    std::vector<gsl_matrix_complex*> RmatsL;
+
+
+
+int it=2;
+for(int i=0; i<it; i++){
+
+    dmrg -> Infinite();
     En = dmrg -> getEgs();
 
-    cout << "Groundstate energy 4 sites: " << En << endl;
+    cout << "Groundstate energy "<< 4+2*i<<" sites: " << En << endl;
     
-    //gsl_matrix_complex_print(dmrg->getSYS()->getL()->getH());
-    //cout<<endl;
-    //gsl_matrix_complex_print(dmrg->getSYS()->getL()->getS(0,1));
-    //cout<<endl;
-    //cout << dmrg->getSYS()->getL()->getChi() << endl;
-    //cout<<endl;
+    gsl_matrix_complex_print(dmrg->getSYS()->getL()->getH());
+    cout<<endl;
+    gsl_matrix_complex_print(dmrg->getSYS()->getL()->getS(0,1));
+    cout<<endl;
+    cout << dmrg->getSYS()->getL()->getChi() << endl;
+    cout<<endl;
 
+    HmatsL= dmrg -> getHL();
+    HmatsR= dmrg -> getHR();
+    RmatsL= dmrg -> getRL();
+    RmatsR= dmrg -> getRR(); 
 
-// ------------------------------End of first iteration--------------
+    cout << "================ Hamiltonian Memory test ===================" << endl;
+    gsl_matrix_complex_print(HmatsL[i]);
+    cout << endl;
+    gsl_matrix_complex_print(HmatsR[i]);
+    cout << endl;
+    cout << "================ Renormalization Memory test ===================" << endl;
+    cout << endl;
+    gsl_matrix_complex_print(RmatsL[i]);
+    cout<< endl;
+    gsl_matrix_complex_print(RmatsR[i]);
 
-    dmrg -> Infinite();
+}
 
-    En = dmrg -> getEgs();
+    // cout << "len = " << HmatsL.size() << endl;
+    // cout << endl;
 
-    cout << "Groundstate energy 6 sites: " << En << endl;
+    // cout << "HmatsL[0]" << endl;
+    // gsl_matrix_complex_print(HmatsL[0]);
+    // cout << "HmatsR[0]" << endl;
+    // gsl_matrix_complex_print(HmatsR[0]);
 
-    dmrg -> Infinite();
+    // for (int i=0; i<it;i++){
 
-    En = dmrg -> getEgs();
+        // cout << "================ Hamiltonian Memory test ===================" << endl;
+        // gsl_matrix_complex_print(HmatsL[i]);
+        // cout << endl;
+        // gsl_matrix_complex_print(HmatsR[i]);
+        // cout << endl;
+        // cout << "================ Renormalization Memory test ===================" << endl;
+        // cout << endl;
+        // gsl_matrix_complex_print(RmatsL[i]);
+        // cout<< endl;
+        // gsl_matrix_complex_print(RmatsR[i]);
 
-    cout << "Groundstate energy 8 sites: " << En << endl;
-
-    dmrg -> Infinite();
-
-    En = dmrg -> getEgs();
-
-    cout << "Groundstate energy 10 sites: " << En << endl;
+    // }
 
     return 0;
 }

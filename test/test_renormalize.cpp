@@ -32,11 +32,14 @@ int main(){
 
     ////////////////////////////////////////////
 
+
+    Rs = SYS->compute_Rmat();
+
+
     cout << "########################" << endl;
     cout << "Renormalization matrices:" << endl;
     cout << endl;
     
-    Rs = SYS->compute_Rmat();
     
     cout << "RL = " << endl;
     gsl_matrix_complex_print(Rs.first);
