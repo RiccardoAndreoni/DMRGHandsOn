@@ -45,14 +45,14 @@ void gsl_vector_print(const gsl_vector *v)
 	}
 }
 
-// Tensor product
+/***** Tensor product *****/
 
 int  gsl_blas_zgetp (const gsl_complex alpha,
                      const gsl_matrix_complex * A,
                      const gsl_matrix_complex * B,
-                     gsl_matrix_complex * C){
-	
-	// sizes
+                     gsl_matrix_complex * C)
+{
+	/* sizes */
 	const size_t rA = A->size1;
 	const size_t cA = A->size2;
 	const size_t rB = B->size1;
@@ -62,7 +62,7 @@ int  gsl_blas_zgetp (const gsl_complex alpha,
 	if(rC != rA*rB) if(cC != cA*cB) 
 	{ error_message("C is "+to_string(rC)+"x"+to_string(cC)+", should be "+to_string(rA)+"*"+to_string(rB)+"x"+to_string(cA)+"*"+to_string(cB)); }
 
-	// Set elements
+	/* Set elements */
 	for (size_t i=0; i<rC ; ++i){
 		for (size_t j=0; j<cC; ++j){
 			gsl_matrix_complex_set(C, i, j, 
@@ -76,7 +76,7 @@ int  gsl_blas_zgetp (const gsl_complex alpha,
 	return 0;
 }
 
-// Reshaping
+/***** Reshaping *****/
 
 void res_vec_mat(const vector<double>& in, gsl_matrix_complex * out){
     size_t rows = out->size1;
@@ -108,7 +108,7 @@ void res_mat_vec(gsl_matrix_complex * in, vector<double>& out){
     }
 }
 
-// Convert
+/***** Convert *****/
 
 void conv_real_comp(gsl_matrix_complex * out, gsl_matrix * in)
 {

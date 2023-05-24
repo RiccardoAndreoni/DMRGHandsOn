@@ -100,18 +100,17 @@ class sys
 
 		sys(double Jx_, double Jy_, double Jz_, double h_, int dim_);
 
-		// GS computation
+		/* GS computation */
 		double compute_GS();
 
-		// Computation of renormalization matrices
+		/* Computation of renormalization matrices */
 		std::pair<gsl_matrix_complex*, gsl_matrix_complex*> compute_Rmat();
 
-		// Get stuff
+		/* Get stuff */
 		gsl_matrix_complex * getGS(){ return GS; }
 		block* getL(){ return L; }
 		block* getR(){ return R; }
 };
-
 
 class DMRG
 {

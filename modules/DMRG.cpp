@@ -3,12 +3,10 @@
 #include "DMRG.hpp"
 #include "service.hpp"
 
- DMRG::DMRG(double Jx_, double Jy_, double Jz_, double h_, int dim_){
-     // construct sys
+DMRG::DMRG(double Jx_, double Jy_, double Jz_, double h_, int dim_){
+    // construct sys
     S = new sys(Jx_, Jy_, Jz_, h_, dim_);
-     // allocate RL, RR (?)
-
- }
+}
 
 // void DMRG::run_DMRG(){
 //     // Infinite() until L
@@ -16,45 +14,35 @@
 //     // Measure
 // }
 
+/****** Perform one step of the infinite algorithm ******/
 void DMRG::Infinite(){
 
-
-
-    // Add sites
+    /* Add sites */
     S->getL()->AddSite();
     S->getR()->AddSite();
     
-
-    // Compute GS
+    /* Compute GS */
     Egs = S->compute_GS();
 
-    // Compute renormalization matrices
+    /* Compute renormalization matrices */
     std::pair<gsl_matrix_complex*, gsl_matrix_complex*> R;
     R = S->compute_Rmat();
 
-    // Store R mats in memory vectors
+    /* Store R mats in memory vectors */
     RL.emplace_back(new gsl_matrix_complex);
     RR.emplace_back(new gsl_matrix_complex);
     RL[RL.size() -1] = R.first;
     RR[RR.size() -1] = R.second;
 
-    // Renormalize
+    /* Renormalize */
     S->getL()->Renormalize(R.first);
     S->getR()->Renormalize(R.second);
 
-    // Store H mats in memory vectors 
-    
-    // gsl_matrix_complex * HtempL= gsl_matrix_complex_alloc(S->getL()->getChi(), S->getL()->getChi());
-    // gsl_matrix_complex * HtempR= gsl_matrix_complex_alloc(S->getR()->getChi(), S->getR()->getChi());
-     
-    // HtempL=S->getL()->getH();
-    // HtempR=S->getR()->getH();
-
+    /* Store H mats in memory vectors */
     HL.emplace_back(new gsl_matrix_complex);
     HR.emplace_back(new gsl_matrix_complex);
     HL[HL.size() -1] = S->getL()->getH();
     HR[HR.size() -1] = S->getR()->getH();
-
 
 }
 

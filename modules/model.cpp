@@ -5,20 +5,20 @@
 
 model::model(double Jx_, double Jy_, double Jz_, double h_, int dim_)
 {
-	// Set Hamiltonian parameters
+	/* Set Hamiltonian parameters */
 	J = new gsl_complex[3];
 	J[0] = gsl_complex_rect(Jx_, 0);	//read(Jx, parfile)
 	J[1] = gsl_complex_rect(Jy_, 0);	//read(Jy, parfile)
 	J[2] = gsl_complex_rect(Jz_, 0);	//read(Jz, parfile)
 	h  = gsl_complex_rect(h_, 0);	//read(h, parfile)
 
-	// Set local dimension
+	/* Set local dimension */
 	dim = dim_;	//read(dim, parfile)
 
-	// Define single site operators
+	/* Define single site operators */
 	InitOps();
 
-	// Initialize single site Hamiltonian
+	/* Initialize single site Hamiltonian */
 	InitH();
 }
 
@@ -30,10 +30,11 @@ void model::InitOps()
 	}
 
 	Id = gsl_matrix_complex_alloc(dim,dim);
-	// Identity
+	
+	/* Identity */
 	gsl_matrix_complex_set_identity(Id);
 
-	// Pauli
+	/* Pauli */
 	switch(dim) 
 	{
 		case 3:
@@ -69,7 +70,8 @@ void model::InitOps()
 	}
 }
 
-void model::InitH(){
+void model::InitH()
+{
 	// Hs = h*Sz
 	Hs = gsl_matrix_complex_calloc(dim,dim);
 	gsl_matrix_complex_memcpy(Hs, O[2]);
