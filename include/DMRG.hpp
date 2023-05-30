@@ -77,7 +77,8 @@ class block
 		/* Add sites */
 		void computeHLo(gsl_matrix_complex* H);	// Build HLo from HL
 		void computeHoR(gsl_matrix_complex* H);	// Build HoR from HR
-		void AddSite();
+		gsl_matrix_complex * AddSite();
+		void BreakBlock(gsl_matrix_complex * old_H);
 
 		/* Get stuff */
 		int getChi() { return chi; }
@@ -131,10 +132,8 @@ class DMRG
 
 		/* Infinite */
 		void Infinite(); //Compute gs via Lanczos, reduced density matrix, chi highest eigenvectors, R, Hnew->Hthildenew	
-		void LoadRmats(pair<gsl_matrix_complex*, gsl_matrix_complex*>);	
-
-		/* Finite */
-		void Sweeps();
+		void Finite();
+		// void LoadRmats(pair<gsl_matrix_complex*, gsl_matrix_complex*>);	
 
 		/*Return Egs*/
 		double getEgs(){return Egs;}

@@ -9,17 +9,22 @@ DMRG::DMRG(double Jx_, double Jy_, double Jz_, double h_, int dim_){
 }
 
 // void DMRG::run_DMRG(){
-//     // Infinite() until L
-//     // Finite until convergence (dE<eps)
-//     // Measure
+        // Infinite() until L
+        
+        // Remove last HmatsR from memory
+        // HR.popback();
+
+        // Finite until convergence (dE<eps)
+        // Measure
 // }
 
 /****** Perform one step of the infinite algorithm ******/
-void DMRG::Infinite(){
+void DMRG::Infinite()
+{
 
     /* Add sites */
-    S->getL()->AddSite();
-    S->getR()->AddSite();
+    gsl_matrix_complex * temp_HLo = S->getL()->AddSite();
+    gsl_matrix_complex * temp_HoR = S->getR()->AddSite();
     
     /* Compute GS */
     Egs = S->compute_GS();
@@ -41,12 +46,28 @@ void DMRG::Infinite(){
     /* Store H mats in memory vectors */
     HL.emplace_back(new gsl_matrix_complex);
     HR.emplace_back(new gsl_matrix_complex);
-    HL[HL.size() -1] = S->getL()->getH();
-    HR[HR.size() -1] = S->getR()->getH();
+    HL[HL.size() -1] = temp_HLo;
+    HR[HR.size() -1] = temp_HoR;
 
 }
 
-// DMRG::Finite()
+// void DMRG::Finite()
 // {
+//     // DIRECTION SWITCH
+
+
+//     // Enlarge on left
+//     S->getL()->AddSite();
+
+//     // Shrink on right
+//     S->getR()->BreakBlock(HR.back());
+//     HR.pop_back();
+
+//     // Reshape GS
+//     reshape phi
+
+//     // Compute new GS
+
+//     // SVD
 
 // }
