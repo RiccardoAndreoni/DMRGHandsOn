@@ -13,6 +13,65 @@ sys::sys(double Jx_, double Jy_, double Jz_, double h_, int dim_)
 	// cout << "R built" << endl; // TEST
 }
 
+
+/* Lanczos initial guess */
+
+// template<typename T>
+// using vector = std::vector<T>;
+// /**
+//  * @brief Template class to implement random vector initializer.
+//  *
+//  * "Partially specialization of function" is not allowed,
+//  * so here it is mimicked by wrapping the "init" function with a class template.
+//  */
+
+// template <typename T>
+// struct InitialGuessLanczos{
+// 	public:
+// 	static void init(std::vector<T>& v) {
+		
+// 		// We need access to RR and RL vectors of renormalization matrices which belongs to the DMRG class
+// 			//Options:  -Take init as an input somehow and do the GS_tilde computation in dmrg? This implies 
+// 			//			   creating a diff compute GS for the finite algorithm
+// 			// 			-Call RR and RL somehow ?
+//  		GS_tilde=transpose(U(most recent)).GS.(Id(2) x transpose(V(old infinite iterations)))
+// 		GS_tilde=reshape(GS_tilde)
+// 		RR 
+// 		v=GS_tilde
+
+// 		// res_mat_vec(GS)
+		
+// 		// int RandSeed = 13;
+//     	// std::mt19937 mt(RandSeed);
+//     	// std::uniform_real_distribution<T> rand((T)(-1.0), (T)(1.0));
+
+//    		// size_t n = v.size();
+//     	// for(size_t i = 0; i < n; ++i) {
+//       	// 	v[i] = rand(mt); 
+//     	// }
+// 	}
+// };
+
+// template <typename T>
+// struct InitialGuessLanczos<std::complex<T>> {
+// 	public:
+// 	static void init(std::vector<std::complex<T>>& v) {
+
+// 		// res_mat_vec(GS)
+
+
+// 		// int RandSeed = 13;
+// 	    // std::mt19937 mt(RandSeed);
+// 	    // std::uniform_real_distribution<T> rand((T)(-1.0), (T)(1.0));
+
+// 	    // size_t n = v.size();
+// 	    // for(size_t i = 0; i < n; ++i) {
+// 	    // 	v[i] = std::complex<T>(rand(mt), rand(mt));
+
+// 		// }
+// 	}
+// };
+
 /****** GS computation ******/
 double sys::compute_GS()
 {
@@ -85,11 +144,15 @@ double sys::compute_GS()
 
 	/* Lanczos */
 	lambda_lanczos::LambdaLanczos<double> engine(mv_mul, n, false, 1); 
+	// if(guess) engine.init_vector = InitialGuessLanczos<double>::init; // Initial guess taken from the stored GS
+
 	std::vector<double> eigenvalues;
 	std::vector<std::vector<double>> eigenvectors;
+
 	// cout << "Run Lanczos" << endl;  // TEST
 	engine.run(eigenvalues, eigenvectors);
 	// cout << "End Lanczos" << endl;  // TEST
+	
 	res_vec_mat(eigenvectors[0], GS); // NB: GS is real
 
 	// cout << endl;                                                                           // TEST
@@ -162,4 +225,78 @@ std::pair<gsl_matrix_complex*, gsl_matrix_complex*> sys::compute_Rmat()
 	}
 
 	return make_pair(tempRL, tempRR);
+}
+
+/***** Save *****/
+
+void sys::saveH(char pos, gsl_matrix_complex* H)
+{
+	switch(pos) 
+	{
+		case 'l':
+			HL.emplace_back(new gsl_matrix_complex);
+			HL.back() = H;
+		break;
+		case 'r':
+			HR.emplace_back(new gsl_matrix_complex);
+			HR.back() = H;
+		break;
+		default:
+			error_message("Block position not allowed in saveH");
+	}
+}
+
+void sys::saveR(char pos, gsl_matrix_complex* R)
+{
+	switch(pos) 
+	{
+		case 'l':
+			RL.emplace_back(new gsl_matrix_complex);
+			RL.back() = R;
+		break;
+		case 'r':
+			RR.emplace_back(new gsl_matrix_complex);
+			RR.back() = R;
+		break;
+		default:
+			error_message("Block position not allowed in saveR");
+	}
+}
+
+/***** Load *****/
+
+gsl_matrix_complex* sys::loadH(char pos)
+{
+	switch(pos) 
+	{
+		case 'l':
+			return HL.back();
+			HL.pop_back();
+		break;
+		case 'r':
+			return HR.back();
+			HR.pop_back();
+		break;
+		default:
+			error_message("Block position not allowed in loadH");
+			exit(1);
+	}
+}
+
+gsl_matrix_complex* sys::loadR(char pos)
+{
+	switch(pos) 
+	{
+		case 'l':
+			return RL.back();
+			RL.pop_back();
+		break;
+		case 'r':
+			return RR.back();
+			RR.pop_back();
+		break;
+		default:
+			error_message("Block position not allowed in loadR");
+			exit(1);
+	}
 }

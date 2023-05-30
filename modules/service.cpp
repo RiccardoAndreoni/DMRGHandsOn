@@ -78,7 +78,8 @@ int  gsl_blas_zgetp (const gsl_complex alpha,
 
 /***** Reshaping *****/
 
-void res_vec_mat(const vector<double>& in, gsl_matrix_complex * out){
+void res_vec_mat(const vector<double>& in, gsl_matrix_complex * out)
+{
     size_t rows = out->size1;
     size_t cols = out->size2;
     for(size_t i=0; i<rows; i++){
@@ -88,7 +89,8 @@ void res_vec_mat(const vector<double>& in, gsl_matrix_complex * out){
     }
 }
 
-void res_vec_mat(const vector<double>& in, gsl_matrix * out){
+void res_vec_mat(const vector<double>& in, gsl_matrix * out)
+{
     size_t rows = out->size1;
     size_t cols = out->size2;
     for(size_t i=0; i<rows; i++){
@@ -98,7 +100,8 @@ void res_vec_mat(const vector<double>& in, gsl_matrix * out){
     }
 }
 
-void res_mat_vec(gsl_matrix_complex * in, vector<double>& out){
+void res_mat_vec(gsl_matrix_complex * in, vector<double>& out)
+{
     size_t rows = in->size1;
     size_t cols = in->size2;
     for(size_t i=0; i<rows; i++){

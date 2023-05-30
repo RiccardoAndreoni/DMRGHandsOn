@@ -33,10 +33,10 @@ for(int i=0; i<it; i++){
     cout << dmrg->getSYS()->getL()->getChi() << endl;
     cout<<endl;
 
-    HmatsL= dmrg -> getHL();
-    HmatsR= dmrg -> getHR();
-    RmatsL= dmrg -> getRL();
-    RmatsR= dmrg -> getRR(); 
+    HmatsL= dmrg -> getSYS() -> getHL();
+    HmatsR= dmrg -> getSYS() -> getHR();
+    RmatsL= dmrg -> getSYS() -> getRL();
+    RmatsR= dmrg -> getSYS() -> getRR(); 
 
     cout << "================ Hamiltonian Memory test ===================" << endl;
     gsl_matrix_complex_print(HmatsL[i]);

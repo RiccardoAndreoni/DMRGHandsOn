@@ -97,6 +97,13 @@ class sys
 
 		gsl_matrix_complex * GS;		// Ground state of the system
 
+		/* Memory */
+		std::vector<gsl_matrix_complex*> RL;
+		std::vector<gsl_matrix_complex*> RR;
+		std::vector<gsl_matrix_complex*> HL;
+		std::vector<gsl_matrix_complex*> HR;
+
+		
 	public:
 
 		sys(double Jx_, double Jy_, double Jz_, double h_, int dim_);
@@ -111,6 +118,18 @@ class sys
 		gsl_matrix_complex * getGS(){ return GS; }
 		block* getL(){ return L; }
 		block* getR(){ return R; }
+		std::vector<gsl_matrix_complex*> getHL(){return HL;}
+		std::vector<gsl_matrix_complex*> getHR(){return HR;}
+		std::vector<gsl_matrix_complex*> getRL(){return RL;}
+		std::vector<gsl_matrix_complex*> getRR(){return RR;}
+
+		/* Save */
+		void saveH(char pos, gsl_matrix_complex* H);
+		void saveR(char pos, gsl_matrix_complex* H);
+		
+		/* Load */
+		gsl_matrix_complex* loadH(char pos);
+		gsl_matrix_complex* loadR(char pos);
 };
 
 class DMRG
@@ -119,10 +138,6 @@ class DMRG
 	private: 
 
 		sys *S;
-		std::vector<gsl_matrix_complex*> RL;
-		std::vector<gsl_matrix_complex*> RR;
-		std::vector<gsl_matrix_complex*> HL;
-		std::vector<gsl_matrix_complex*> HR;
 
 		double Egs;
 
@@ -138,11 +153,6 @@ class DMRG
 		/*Return Egs*/
 		double getEgs(){return Egs;}
 		sys* getSYS(){ return S; }
-
-		std::vector<gsl_matrix_complex*> getHL(){return HL;}
-		std::vector<gsl_matrix_complex*> getHR(){return HR;}
-		std::vector<gsl_matrix_complex*> getRL(){return RL;}
-		std::vector<gsl_matrix_complex*> getRR(){return RR;}
 
 };
 

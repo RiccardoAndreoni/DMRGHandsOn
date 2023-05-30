@@ -3,7 +3,8 @@
 #include "DMRG.hpp"
 #include "service.hpp"
 
-DMRG::DMRG(double Jx_, double Jy_, double Jz_, double h_, int dim_){
+DMRG::DMRG(double Jx_, double Jy_, double Jz_, double h_, int dim_)
+{
     // construct sys
     S = new sys(Jx_, Jy_, Jz_, h_, dim_);
 }
@@ -34,21 +35,16 @@ void DMRG::Infinite()
     R = S->compute_Rmat();
 
     /* Store R mats in memory vectors */
-    RL.emplace_back(new gsl_matrix_complex);
-    RR.emplace_back(new gsl_matrix_complex);
-    RL[RL.size() -1] = R.first;
-    RR[RR.size() -1] = R.second;
+    S->saveR('l', R.first);
+    S->saveR('r', R.second);
 
     /* Renormalize */
     S->getL()->Renormalize(R.first);
     S->getR()->Renormalize(R.second);
 
     /* Store H mats in memory vectors */
-    HL.emplace_back(new gsl_matrix_complex);
-    HR.emplace_back(new gsl_matrix_complex);
-    HL[HL.size() -1] = temp_HLo;
-    HR[HR.size() -1] = temp_HoR;
-
+    S->saveH('l', temp_HLo);
+    S->saveH('r', temp_HoR);
 }
 
 // void DMRG::Finite()
@@ -57,14 +53,14 @@ void DMRG::Infinite()
 
 
 //     // Enlarge on left
-//     S->getL()->AddSite();
+//     // gsl_matrix_complex * temp_HLo = S->getL()->AddSite();
 
 //     // Shrink on right
-//     S->getR()->BreakBlock(HR.back());
+//     // gsl_matrix_complex* tempH = loadH()
+//     S->getR()->BreakBlock(tempH);
 //     HR.pop_back();
 
 //     // Reshape GS
-//     reshape phi
 
 //     // Compute new GS
 

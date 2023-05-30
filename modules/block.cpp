@@ -145,8 +145,8 @@ gsl_matrix_complex * block::AddSite()
 
 // 	// Change back chi
 // 	int dim = M->getDim();
-// 	if(pow(dim,l) > chimax) chi = chimax;
-// 	else chi = pow(dim,l);
+// 	if((int)pow(dim,l) > chimax) chi = chimax;
+// 	else chi = (int)pow(dim,l);
 
 // 	// Change Hamiltonian
 // 	SetHamiltonian(old_H, true);
