@@ -16,9 +16,11 @@
 #include<gsl/gsl_complex_math.h>
 #include <lambda_lanczos/lambda_lanczos.hpp>
 
-#define chimax 4
+#define chimax 6
 
 using namespace std;
+
+// l is the size of the RENORMALIZED block
 
 /******************* Classes *******************/
 
@@ -83,6 +85,7 @@ class block
 		/* Get stuff */
 		int getChi() { return chi; }
 		int getl() { return l; }
+		void reducel() { l = l-1; }
 		gsl_matrix_complex * getS(size_t site, size_t a){ return S[site][a]; } 
 		gsl_matrix_complex * getH(){ return H; }	
 };
@@ -96,6 +99,7 @@ class sys
 		block* R;
 
 		gsl_matrix_complex * GS;		// Ground state of the system
+		gsl_matrix_complex * GUESS;		// Guess for GS in finite algorithm
 
 		/* Memory */
 		std::vector<gsl_matrix_complex*> RL;
@@ -109,13 +113,37 @@ class sys
 		sys(double Jx_, double Jy_, double Jz_, double h_, int dim_);
 
 		/* GS computation */
-		double compute_GS();
+		// double compute_GS();
+		double compute_GS(bool guess);
 
 		/* Computation of renormalization matrices */
 		std::pair<gsl_matrix_complex*, gsl_matrix_complex*> compute_Rmat();
 
+		// /* Lanczos initial guess initializers */
+		// template <typename T> 
+		// struct InitialGuessLanczos
+		// {
+		// 	public:
+		// 		static void init(std::vector<T>& v) {
+		// 			res_mat_vec(m, v);
+		// 		}
+		// };
+
+		// template <typename T> 
+		// struct InitialGuessLanczos<std::complex<T>> 
+		// {
+		// 	public:
+		// 		static void init(std::vector<std::complex<T>>& v) {
+		// 			res_mat_vec(m, v);
+		// 		}
+		// };
+
+		/* Compute Lanczos guess from GS */
+		void GStoGuess(char dir);
+
 		/* Get stuff */
 		gsl_matrix_complex * getGS(){ return GS; }
+		gsl_matrix_complex * getGUESS(){ return GUESS; }
 		block* getL(){ return L; }
 		block* getR(){ return R; }
 		std::vector<gsl_matrix_complex*> getHL(){return HL;}
@@ -123,13 +151,16 @@ class sys
 		std::vector<gsl_matrix_complex*> getRL(){return RL;}
 		std::vector<gsl_matrix_complex*> getRR(){return RR;}
 
+		/* Delete memory inside intermediate step */
+		void DeleteMem(char dir);
+
 		/* Save */
 		void saveH(char pos, gsl_matrix_complex* H);
 		void saveR(char pos, gsl_matrix_complex* H);
 		
 		/* Load */
 		gsl_matrix_complex* loadH(char pos);
-		gsl_matrix_complex* loadR(char pos);
+		gsl_matrix_complex* loadR(char pos, bool del);
 };
 
 class DMRG
@@ -147,10 +178,11 @@ class DMRG
 
 		/* Infinite */
 		void Infinite(); //Compute gs via Lanczos, reduced density matrix, chi highest eigenvectors, R, Hnew->Hthildenew	
-		void Finite();
-		// void LoadRmats(pair<gsl_matrix_complex*, gsl_matrix_complex*>);	
+		void IntermediateStep(char dir);
+		void Finite(char dir);
+		void Sweeps();
 
-		/*Return Egs*/
+		/* Return Egs */
 		double getEgs(){return Egs;}
 		sys* getSYS(){ return S; }
 

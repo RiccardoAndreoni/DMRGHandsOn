@@ -29,6 +29,8 @@ block::block(model *M, char p)
 /* Replace block->H with a new Hamiltonian m */
 void block::SetHamiltonian(gsl_matrix_complex * m, bool freemem)
 {
+		cout << "\tIn SetHamiltonian: " << H << endl; // TEST
+		cout << "\t\t -> dim " << H->size1 << "x" << H->size2 << endl; // TEST
 	if(freemem) gsl_matrix_complex_free(H); // false to keep memory about the discarded Hamiltonian
 	H = m;
 }
@@ -64,11 +66,15 @@ void block::computeHoR(gsl_matrix_complex * m)
 gsl_matrix_complex * block::AddSite()
 {
 	int dim = M->getDim();
+
+	// cout << "\t 011 " << H << endl; // TEST
 	
-	// cout << "1" << endl; // TEST
+	cout << "AddSite.1" << endl; // TEST
 
 	/* Compute Hamiltonian block+site */
 	gsl_matrix_complex* Htemp = gsl_matrix_complex_calloc(chi*dim, chi*dim);
+	// cout << "\t 01a " << H << " " << Htemp << endl; // TEST
+
 	switch(pos) 
 	{
 		case 'l':
@@ -82,7 +88,9 @@ gsl_matrix_complex * block::AddSite()
 	}
 	SetHamiltonian(Htemp, true);   // we don't need info about the renormalized Hamiltonians
 
-	// cout << "2" << endl; // TEST
+	// cout << "\t 012 " << H << endl; // TEST
+
+	cout << "AddSite.2" << endl; // TEST
 
 	/* Redefine block S -> S*Id */
 	gsl_matrix_complex* temp;
@@ -108,7 +116,9 @@ gsl_matrix_complex * block::AddSite()
 		}
 	}
 
-	// cout << "3" << endl; // TEST
+	// cout << "\t 013 " << H << endl; // TEST
+
+	cout << "AddSite.3" << endl; // TEST
 
 	/* Add new site's S */
 	gsl_matrix_complex* Id = gsl_matrix_complex_alloc(chi, chi);
@@ -131,26 +141,34 @@ gsl_matrix_complex * block::AddSite()
 		default: error_message("Block position not allowed in AddSite");
 	}
 
-	/* Increase l */
-	l++;
+	// /* Increase l */
+	// l++;
+	
+	// cout << "\t 014 " << H << endl; // TEST
 
 	return Htemp; 
 }
 
 /* Break the block for the Finite */ //TO TEST
-// void block::BreakBlock(gsl_matrix_complex * old_H)
-// {
-// 	// Change l
-// 	l -= 1;
+void block::BreakBlock(gsl_matrix_complex * old_H)
+{
+	// Change l
+	l -= 1;
 
-// 	// Change back chi
-// 	int dim = M->getDim();
-// 	if((int)pow(dim,l) > chimax) chi = chimax;
-// 	else chi = (int)pow(dim,l);
+	// Change back chi
+	int dim = M->getDim();
 
-// 	// Change Hamiltonian
-// 	SetHamiltonian(old_H, true);
-// }
+		cout << "\t l=" << l << ", dim=" << dim << endl;
+		
+	if((int)pow(dim,l) > chimax) chi = chimax; 
+	else chi = (int)pow(dim,l);
+
+		cout << "\t chi = " << chi << endl; // TEST
+
+	// Change Hamiltonian
+		cout << "in BreakBlock: " << old_H << endl; // TEST
+	SetHamiltonian(old_H, true);
+}
 
 /* Transform all block(l)+site operators in block(l+1) operators */
 void block::Renormalize(gsl_matrix_complex* R)
@@ -172,7 +190,7 @@ void block::Renormalize(gsl_matrix_complex* R)
 	
 	/* Renormalize S single site */
 	gsl_matrix_complex * temp2 = gsl_matrix_complex_calloc(chi, old_chi*dim);
-	for(int i=0; i<l; i++){
+	for(int i=0; i<l+1; i++){
 		for(int j=0; j<3; j++)
 		{
 			gsl_blas_zgemm(CblasTrans, CblasNoTrans, gsl_complex_rect(1,0), R, S[i][j], gsl_complex_rect(0,0), temp2);
@@ -181,5 +199,15 @@ void block::Renormalize(gsl_matrix_complex* R)
 			gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, gsl_complex_rect(1,0), temp2, R, gsl_complex_rect(0,0), S[i][j]);
 		}
 	}
+	// for(int j=0; j<3; j++)
+	// {
+	// 	gsl_blas_zgemm(CblasTrans, CblasNoTrans, gsl_complex_rect(1,0), R, S.back()[j], gsl_complex_rect(0,0), temp2);
+	// 	gsl_matrix_complex_free(S.back()[j]);
+	// 	S.back()[j] = gsl_matrix_complex_calloc(chi, chi);
+	// 	gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, gsl_complex_rect(1,0), temp2, R, gsl_complex_rect(0,0), S.back()[j]);
+	// }
 	gsl_matrix_complex_free(temp2);
+
+	/* Increase l */
+	l++;
 }

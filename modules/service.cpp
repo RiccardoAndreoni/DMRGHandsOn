@@ -76,6 +76,51 @@ int  gsl_blas_zgetp (const gsl_complex alpha,
 	return 0;
 }
 
+/***** Dagger *****/
+
+gsl_matrix_complex* dagger(gsl_matrix_complex* m) 
+{
+	size_t rows = m->size1;
+	size_t cols = m->size2;
+
+    gsl_matrix_complex* result = gsl_matrix_complex_alloc(cols, rows);
+
+    for (size_t i = 0; i < rows; i++) {
+        for (size_t j = 0; j < cols; j++) {
+            gsl_matrix_complex_set(result, j, i, gsl_complex_conjugate(gsl_matrix_complex_get(m, i, j)));
+        }
+    }
+
+    return result;
+}
+
+/***** Norm *****/
+
+double gsl_matrix_complex_norm(gsl_matrix_complex* m)
+{
+	gsl_matrix_complex* temp = gsl_matrix_complex_alloc(m->size1, m->size2);
+	gsl_matrix* temp2		 = gsl_matrix_calloc(m->size1, m->size2);
+
+	gsl_matrix_complex_memcpy(temp, m);
+	gsl_matrix_complex_mul_elements(temp, m);
+
+	conv_comp_real(temp2, temp);
+
+	double norm = sqrt(gsl_matrix_norm1(temp2));
+
+	gsl_matrix_complex_free(temp);
+	gsl_matrix_free(temp2);
+
+	return norm;
+}
+
+void gsl_matrix_complex_normalize(gsl_matrix_complex* m)
+{
+	double norm = gsl_matrix_complex_norm(m);
+	cout << norm << endl;
+	gsl_matrix_complex_scale(m, gsl_complex_rect(1./norm, 0));
+}
+
 /***** Reshaping *****/
 
 void res_vec_mat(const vector<double>& in, gsl_matrix_complex * out)

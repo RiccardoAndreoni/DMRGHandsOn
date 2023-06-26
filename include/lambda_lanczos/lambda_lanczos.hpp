@@ -335,6 +335,8 @@ public:
     this->iter_counts = std::vector<size_t>();
     eigenpair_manager::EigenPairManager<T> ep_manager(find_maximum, num_eigs);
 
+    std::cout << "LANCZOS -> entering iteration loop" << std::endl; // TEST
+
     while(true) {
       std::vector<real_t<T>> eigenvalues_current;
       std::vector<std::vector<T>> eigenvectors_current;
@@ -347,12 +349,18 @@ public:
                                               ep_manager.getEigenvectors());
       this->iter_counts.push_back(iter_count);
 
+      std::cout << "   loop 1." << std::endl; // TEST
+
       bool nothing_added = ep_manager.insertEigenpairs(eigenvalues_current, eigenvectors_current);
+
+      std::cout << "   loop 2." << std::endl; // TEST
 
       if(nothing_added) {
         break;
       }
     }
+
+    std::cout << "LANCZOS -> out of iteration loop" << std::endl; // TEST
 
     const auto& eigenpairs = ep_manager.getEigenpairs();
     eigenvalues = std::vector<real_t<T>>();

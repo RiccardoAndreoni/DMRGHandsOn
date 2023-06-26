@@ -76,7 +76,14 @@ set(EXECUTABLE_OUTPUT_PATH)
 # add_executable(test_lanczos2 test/test_lanczos2.cpp)
 # target_link_libraries(test_lanczos2 common GSL::gsl GSL::gslcblas) # pthread)
 
-
 find_package(GSL REQUIRED)
 add_executable(test_infinite test/test_infinite.cpp)
 target_link_libraries(test_infinite common GSL::gsl GSL::gslcblas) # pthread)
+
+# find_package(GSL REQUIRED)
+# add_executable(test_dagger test/test_dagger.cpp)
+# target_link_libraries(test_dagger common GSL::gsl GSL::gslcblas) # pthread)
+
+find_package(GSL REQUIRED)
+add_executable(test_finite test/test_finite.cpp)
+target_link_libraries(test_finite common GSL::gsl GSL::gslcblas) # pthread)

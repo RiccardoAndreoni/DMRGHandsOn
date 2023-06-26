@@ -19,7 +19,14 @@ int  gsl_blas_zgetp (const gsl_complex alpha,
 					gsl_matrix_complex * C);
 
 
+/******************** Dagger *******************/
 
+gsl_matrix_complex* dagger(gsl_matrix_complex* m);
+
+/********************* Norm ********************/
+
+double gsl_matrix_complex_norm(gsl_matrix_complex* m);
+void gsl_matrix_complex_normalize(gsl_matrix_complex* m);
 
 /**************** Error messages ***************/
 
@@ -29,14 +36,10 @@ inline void error_message(const string err)
 	exit(1);
 }
 
-
-
 /******************* Reshape *******************/
 void res_vec_mat(const vector<double>& in, gsl_matrix_complex * out);
 void res_vec_mat(const vector<double>& in, gsl_matrix * out);
 void res_mat_vec(gsl_matrix_complex * in, vector<double>& out);
-
-
 
 /******************* Convert *******************/
 void conv_real_comp(gsl_matrix_complex * out, gsl_matrix * in);

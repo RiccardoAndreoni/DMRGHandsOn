@@ -18,7 +18,7 @@ int main(){
 
 
 
-int it=2;
+int it=4;
 for(int i=0; i<it; i++){
 
     dmrg -> Infinite();
@@ -26,28 +26,28 @@ for(int i=0; i<it; i++){
 
     cout << "Groundstate energy "<< 4+2*i<<" sites: " << En << endl;
     
-    gsl_matrix_complex_print(dmrg->getSYS()->getL()->getH());
-    cout<<endl;
-    gsl_matrix_complex_print(dmrg->getSYS()->getL()->getS(0,1));
-    cout<<endl;
-    cout << dmrg->getSYS()->getL()->getChi() << endl;
-    cout<<endl;
+    // gsl_matrix_complex_print(dmrg->getSYS()->getL()->getH());
+    // cout<<endl;
+    // gsl_matrix_complex_print(dmrg->getSYS()->getL()->getS(0,1));
+    // cout<<endl;
+    // cout << dmrg->getSYS()->getL()->getChi() << endl;
+    // cout<<endl;
 
     HmatsL= dmrg -> getSYS() -> getHL();
     HmatsR= dmrg -> getSYS() -> getHR();
     RmatsL= dmrg -> getSYS() -> getRL();
     RmatsR= dmrg -> getSYS() -> getRR(); 
 
-    cout << "================ Hamiltonian Memory test ===================" << endl;
-    gsl_matrix_complex_print(HmatsL[i]);
-    cout << endl;
-    gsl_matrix_complex_print(HmatsR[i]);
-    cout << endl;
-    cout << "================ Renormalization Memory test ===================" << endl;
-    cout << endl;
-    gsl_matrix_complex_print(RmatsL[i]);
-    cout<< endl;
-    gsl_matrix_complex_print(RmatsR[i]);
+    // cout << "================ Hamiltonian Memory test ===================" << endl;
+    // gsl_matrix_complex_print(HmatsL[i]);
+    // cout << endl;
+    // gsl_matrix_complex_print(HmatsR[i]);
+    // cout << endl;
+    // cout << "================ Renormalization Memory test ===================" << endl;
+    // cout << endl;
+    // gsl_matrix_complex_print(RmatsL[i]);
+    // cout<< endl;
+    // gsl_matrix_complex_print(RmatsR[i]);
 
 }
 
