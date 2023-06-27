@@ -57,6 +57,8 @@ void sys::GStoGuess(char dir)
 		case 'l':	// (1xU)*GS*V
 			U = loadR('l', false);
 			V = loadR('r', false);
+			cout << "U(" << U->size1 << "x" << U->size2 << ")" << endl;
+			cout << "V(" << V->size1 << "x" << V->size2 << ")" << endl;
 
 			Lprod = gsl_matrix_complex_calloc(U->size1*dim, U->size2*dim); 
 			gsl_blas_zgetp(gsl_complex_rect(1,0), U, id, Lprod);
@@ -122,50 +124,22 @@ double sys::compute_GS(bool guess)
 	/* Define mv_mul */
 	auto mv_mul = [&](const std::vector<double>& in, std::vector<double>& out) 
 	{
-		// cout << "  Entering mv_mul..." << endl;	// TEST
+		cout << "  Entering mv_mul..." << endl;	// TEST
 
 		gsl_matrix_complex * in_mat = gsl_matrix_complex_calloc(chi_l*dim, dim*chi_r);
 		gsl_matrix_complex * out_mat = gsl_matrix_complex_calloc(chi_l*dim, dim*chi_r);
-		
-		/* Reshape in: vector -> gsl_matrix */
-		// cout << "\t reshape vec->mat" << endl; // TEST
-		res_vec_mat(in, in_mat);
-
-
-		/* Sl phi Sr */
-		// cout << "\t Spin definitions" << endl; // TEST
 		gsl_matrix_complex * S_l = gsl_matrix_complex_calloc(chi_l*dim, dim*chi_l);
 		gsl_matrix_complex * S_r = gsl_matrix_complex_calloc(chi_r*dim, dim*chi_r);
-
 		gsl_matrix_complex * Id_l = gsl_matrix_complex_calloc(chi_l, chi_l);
-		gsl_matrix_complex_set_identity(Id_l);
 		gsl_matrix_complex * Id_r = gsl_matrix_complex_calloc(chi_r, chi_r);
-		gsl_matrix_complex_set_identity(Id_r);
-
-		// cout << "\t interaction part" << endl; // TEST
+		cout << "almost" << endl;
 		gsl_matrix_complex * temp = gsl_matrix_complex_calloc(chi_l*dim, dim*chi_r);
-		for(size_t i=0; i<3; i++){ 
-			gsl_blas_zgetp(gsl_complex_rect(1,0), Id_l, M->getO(i), S_l);
-			gsl_blas_zgetp(gsl_complex_rect(1,0), M->getO(i), Id_r, S_r);
-			gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, M->getJ(i), S_l, in_mat, gsl_complex_rect(0,0), temp);
-			gsl_blas_zgemm(CblasNoTrans, CblasTrans, gsl_complex_rect(1,0), temp, S_r, gsl_complex_rect(1,0), out_mat);
-			gsl_matrix_complex_set_zero(temp);
-			gsl_matrix_complex_set_zero(S_l);
-			gsl_matrix_complex_set_zero(S_r);
-		}
 
-		// cout << "\t free" << endl; // TEST
-		gsl_matrix_complex_free(temp);
-		gsl_matrix_complex_free(Id_l);
-		gsl_matrix_complex_free(Id_r);
-		gsl_matrix_complex_free(S_l);
-		gsl_matrix_complex_free(S_r);
+		/* Reshape in: vector -> gsl_matrix */
+		cout << "\t reshape vec->mat" << endl; // TEST
+		res_vec_mat(in, in_mat);
 
-		// cout << "\t tensor product" << endl; // TEST
-		// cout << "\t\tHl(" << tmp_HL->size1 << "x" << tmp_HL->size2 << ")  -  in_mat(";	// TEST
-		// cout << in_mat->size1 << "x" << in_mat->size2 << ")   ##   " ;							// TEST
-		// cout << "\tin_mat(" << in_mat->size1 << "x" << in_mat->size2 << ")  -  Hr("; 			// TEST
-		// cout << tmp_HR->size1 << "x" << tmp_HR->size2 << ")" << endl; 					// TEST
+		cout << "\t tensor product" << endl; // TEST
 
 		/* Hl phi 1r */
 		// cout << "\t\t1." << endl; // TEST
@@ -174,12 +148,44 @@ double sys::compute_GS(bool guess)
 		// cout << "\t\t2." << endl; // TEST
 		gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, gsl_complex_rect(1,0), in_mat, tmp_HR, gsl_complex_rect(1,0), out_mat);  
 		
+		cout << "\t\tHl(" << tmp_HL->size1 << "x" << tmp_HL->size2 << ")  -  in_mat(";	// TEST
+		cout << in_mat->size1 << "x" << in_mat->size2 << ")  -  Hr("; 			// TEST
+		cout << tmp_HR->size1 << "x" << tmp_HR->size2 << ")  -  out_mat(";	// TEST
+		cout << out_mat->size1 << "x" << out_mat->size2 << ")" << endl; // TEST
+
+		/* Sl phi Sr */
+		cout << "\t Spin definitions" << endl; // TEST
+		gsl_matrix_complex_set_identity(Id_l);
+		gsl_matrix_complex_set_identity(Id_r);
+
+		cout << "\t interaction part" << endl; // TEST
+		cout << "\t interaction part 2" << endl; // TEST
+		for(size_t i=0; i<3; i++){ 
+			gsl_blas_zgetp(gsl_complex_rect(1,0), Id_l, M->getO(i), S_l);
+			gsl_blas_zgetp(gsl_complex_rect(1,0), M->getO(i), Id_r, S_r);
+			// gsl_matrix_complex_memcpy(S_l, L->getS().back()[i]);
+			// gsl_matrix_complex_memcpy(S_r, R->getS().back()[i]);
+			gsl_blas_zgemm(CblasNoTrans, CblasNoTrans, M->getJ(i), S_l, in_mat, gsl_complex_rect(0,0), temp);
+			gsl_blas_zgemm(CblasNoTrans, CblasTrans, gsl_complex_rect(1,0), temp, S_r, gsl_complex_rect(1,0), out_mat);
+			gsl_matrix_complex_set_zero(temp);
+			gsl_matrix_complex_set_zero(S_l);
+			gsl_matrix_complex_set_zero(S_r);
+		}
+
+		cout << "\t free" << endl; // TEST
+		gsl_matrix_complex_free(temp);
+		gsl_matrix_complex_free(Id_l);
+		gsl_matrix_complex_free(Id_r);
+		gsl_matrix_complex_free(S_l);
+		gsl_matrix_complex_free(S_r);
+
 
 		/* Reshape out: gsl_matrix -> vector */
-		// cout << "\t  reshape mat->vec" << endl; // TEST
+		cout << "\t  reshape mat->vec" << endl; // TEST
 		res_mat_vec(out_mat, out);
+		gsl_matrix_complex_free(out_mat);
 
-		// cout << "\t -- DONE --" << endl; // TEST
+		cout << "\t -- DONE --" << endl; // TEST
 	};
 
 	cout << "compute_GS.2" << endl; // TEST

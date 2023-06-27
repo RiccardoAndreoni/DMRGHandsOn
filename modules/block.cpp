@@ -47,7 +47,7 @@ void block::computeHLo(gsl_matrix_complex * m)
 	gsl_blas_zgetp(gsl_complex_rect(1, 0), Id , M->getHs(), m);
 
 	for(size_t i=0; i<3; i++)
-	{ gsl_blas_zgetp(M->getJ(i), S[l-1][i], M->getO(i), m); }
+	{ gsl_blas_zgetp(M->getJ(i), S.back()[i], M->getO(i), m); }
 }
 
 /* Build HoR from HR when a site is added on the LEFT of the block */
@@ -59,7 +59,7 @@ void block::computeHoR(gsl_matrix_complex * m)
 	gsl_blas_zgetp(gsl_complex_rect(1, 0), M->getHs(), Id , m);
 	
 	for(size_t i=0; i<3; i++)
-	{ gsl_blas_zgetp(M->getJ(i), M->getO(i), S[l-1][i], m); }
+	{ gsl_blas_zgetp(M->getJ(i), M->getO(i), S.back()[i], m); }
 }
 
 /* Add site to a block */
@@ -129,14 +129,14 @@ gsl_matrix_complex * block::AddSite()
 		case 'l':
 			for(size_t i=0; i<3; i++)
 			{
-				S[l][i] = gsl_matrix_complex_calloc(dim*chi, dim*chi);
-				gsl_blas_zgetp(gsl_complex_rect(1,0), Id, M->getO(i), S[l][i]);
+				S.back()[i] = gsl_matrix_complex_calloc(dim*chi, dim*chi);
+				gsl_blas_zgetp(gsl_complex_rect(1,0), Id, M->getO(i), S.back()[i]);
 			} break;
 		case 'r':
 			for(size_t i=0; i<3; i++)
 			{
-				S[l][i] = gsl_matrix_complex_calloc(dim*chi, dim*chi);
-				gsl_blas_zgetp(gsl_complex_rect(1,0), M->getO(i), Id, S[l][i]);
+				S.back()[i] = gsl_matrix_complex_calloc(dim*chi, dim*chi);
+				gsl_blas_zgetp(gsl_complex_rect(1,0), M->getO(i), Id, S.back()[i]);
 			} break;
 		default: error_message("Block position not allowed in AddSite");
 	}
@@ -210,4 +210,14 @@ void block::Renormalize(gsl_matrix_complex* R)
 
 	/* Increase l */
 	l++;
+}
+
+void block::delS()
+{
+	for(size_t i=0; i<3; i++)
+	{
+		gsl_matrix_complex_free(S.back()[i]);
+	}
+	free(S.back());
+	S.pop_back();
 }

@@ -86,8 +86,8 @@ int main(){
 
     ///////////////////////////////////////////////////////
 
-    cout << "POINTERS " << dmrg->getSYS()->getL()->getH() << " " << dmrg->getSYS()->getR()->getH() << endl;
-    cout << "POINTERS " << dmrg->getSYS()->getHL().back() << " " << dmrg->getSYS()->getHR().back() << endl;
+    // cout << "POINTERS " << dmrg->getSYS()->getL()->getH() << " " << dmrg->getSYS()->getR()->getH() << endl;
+    // cout << "POINTERS " << dmrg->getSYS()->getHL().back() << " " << dmrg->getSYS()->getHR().back() << endl;
 
 
     for(int i=0; i<it; i++){

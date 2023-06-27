@@ -87,6 +87,9 @@ class block
 		int getl() { return l; }
 		void reducel() { l = l-1; }
 		gsl_matrix_complex * getS(size_t site, size_t a){ return S[site][a]; } 
+		std::vector<gsl_matrix_complex**> getS(){ return S; } 
+		void delS();
+
 		gsl_matrix_complex * getH(){ return H; }	
 };
 

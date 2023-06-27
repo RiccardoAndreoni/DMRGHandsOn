@@ -18,7 +18,7 @@ int main(){
 
 
 
-int it=4;
+int it=500;
 for(int i=0; i<it; i++){
 
     dmrg -> Infinite();

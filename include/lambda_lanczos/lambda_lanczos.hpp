@@ -232,6 +232,10 @@ public:
 
     const auto n = this->matrix_size;
 
+    std::cout << "      run_it 0. : n=" << n << std::endl; // TEST
+    std::cout << "                  initial_v_size=" << initial_vector_size << std::endl; // TEST
+    std::cout << "                  u size=" << u.size() << std::endl; // TEST
+
     u.emplace_back(n);
     this->init_vector(u[0]);
     util::schmidt_orth(u[0], orthogonalizeTo.cbegin(), orthogonalizeTo.cend());
@@ -241,13 +245,28 @@ public:
     std::vector<real_t<T>> pevs; // Previous eigenvalue
 
     size_t itern = this->max_iteration;
+
+    std::cout << "      run_it 1. : max_it=" << this->max_iteration << std::endl; // TEST
+    std::cout << "                  u size=" << u.size() << std::endl; // TEST
+
     for(size_t k = 1; k <= this->max_iteration; ++k) {
       /* au = (A + offset*E)uk, here E is the identity matrix */
+
+      std::cout << "      run_it 1.getin. : " << n << std::endl; // TEST
+
       std::vector<T> au(n, 0.0); // Temporal storage to store matrix-vector multiplication result
+
+      // std::cout << "      run_it 1.0." << std::endl; // TEST
+
       this->mv_mul(u[k-1], au);
+
+      // std::cout << "      run_it 1.1." << std::endl; // TEST
+
       for(size_t i = 0; i < n; ++i) {
         au[i] += u[k-1][i]*this->eigenvalue_offset;
       }
+
+      // std::cout << "      run_it 1.2." << std::endl; // TEST
 
       alpha.push_back(std::real(util::inner_prod(u[k-1], au)));
 
@@ -260,6 +279,8 @@ public:
         }
       }
 
+      // std::cout << "      run_it 1.3." << std::endl; // TEST
+
       util::schmidt_orth(u[k], orthogonalizeTo.cbegin(), orthogonalizeTo.cend());
       util::schmidt_orth(u[k], u.begin(), u.end()-1);
 
@@ -268,11 +289,13 @@ public:
       size_t num_eigs_to_calculate = std::min(nroot, alpha.size());
       evs = std::vector<real_t<T>>();
 
+      // std::cout << "      run_it 1.4." << std::endl; // TEST
+
       std::vector<real_t<T>> eigvals_all(alpha.size());
       tridiagonal::tridiagonal_eigenvalues(alpha, beta, eigvals_all);
       if(this->find_maximum) {
         for(size_t i = 0; i < num_eigs_to_calculate; ++i) {
-          evs.push_back(eigvals_all[eigvals_all.size()-i-1]);
+          evs.push_back(eigvals_all[eigvals_all.size()-i-1]); 
         }
       } else {
         for(size_t i = 0; i < num_eigs_to_calculate; ++i) {
@@ -313,9 +336,13 @@ public:
       }
     }
 
+    std::cout << "      run_it 2." << std::endl; // TEST
+
     eigvalues = evs;
     eigvecs.resize(eigvalues.size());
     beta.back() = 0.0;
+
+    std::cout << "      run_it 3." << std::endl; // TEST
 
     eigvecs = compute_eigenvectors(alpha, beta, u, find_maximum, eigvalues.size());
     for(size_t i = 0; i < eigvalues.size(); ++i) {
@@ -341,7 +368,11 @@ public:
       std::vector<real_t<T>> eigenvalues_current;
       std::vector<std::vector<T>> eigenvectors_current;
 
+      // std::cout << "   loop 0." << std::endl; // TEST
+
       size_t nroot = std::min(num_eigs_per_iteration, this->matrix_size - ep_manager.size());
+
+      // std::cout << "   loop 1." << std::endl; // TEST
 
       size_t iter_count = this->run_iteration(eigenvalues_current,
                                               eigenvectors_current,
@@ -349,11 +380,11 @@ public:
                                               ep_manager.getEigenvectors());
       this->iter_counts.push_back(iter_count);
 
-      std::cout << "   loop 1." << std::endl; // TEST
+      // std::cout << "   loop 2." << std::endl; // TEST
 
       bool nothing_added = ep_manager.insertEigenpairs(eigenvalues_current, eigenvectors_current);
 
-      std::cout << "   loop 2." << std::endl; // TEST
+      // std::cout << "   loop 3." << std::endl; // TEST
 
       if(nothing_added) {
         break;

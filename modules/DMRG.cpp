@@ -25,7 +25,7 @@ DMRG::DMRG(double Jx_, double Jy_, double Jz_, double h_, int dim_)
 /****** Perform one step of the infinite algorithm ******/
 void DMRG::Infinite()
 {
-    /* Renormalize */
+    /* Renormalize */ // If nothing in memory == first step => no renorm needed
     if(!S->getRL().empty()) S->getL()->Renormalize(S->getRL().back());
     if(!S->getRR().empty()) S->getR()->Renormalize(S->getRR().back());
 
@@ -34,8 +34,7 @@ void DMRG::Infinite()
     gsl_matrix_complex * temp_HoR = S->getR()->AddSite();
     
     /* Compute GS */
-    // Egs = S->compute_GS(false);
-    Egs = S->compute_GS(false); //test
+    Egs = S->compute_GS(false); 
 
     /* Compute renormalization matrices */
     std::pair<gsl_matrix_complex*, gsl_matrix_complex*> R;
@@ -62,10 +61,10 @@ void DMRG::Finite(char dir)
     cout << "Finite.1" << endl; // TEST
     
     /* Delete memory in direction of the sweep*/
-    // getSYS()->DeleteMem(dir);
+    getSYS()->DeleteMem(dir);
 
-    cout << "POINTERS " << S->getL()->getH() << " " << S->getR()->getH() << endl;
-    cout << "POINTERS " << S->getHL().back() << " " << S->getHR().back() << endl;
+    // cout << "POINTERS " << S->getL()->getH() << " " << S->getR()->getH() << endl;
+    // cout << "POINTERS " << S->getHL().back() << " " << S->getHR().back() << endl;
 
     /* Enlarge and break blocks*/
     gsl_matrix_complex * temp_Henl;
@@ -74,37 +73,37 @@ void DMRG::Finite(char dir)
 	{
 		case 'r':	
 			// Enlarge on left
-                cout << "0. " << S->getL()->getH() << " " << S->getR()->getH() << endl;
+                // cout << "0. " << S->getL()->getH() << " " << S->getR()->getH() << endl;
 
             S->getL()->Renormalize(S->getRL().back());  //Renormalize 
-                cout << "01 " << S->getL()->getH() << " " << S->getR()->getH() << endl;
+                // cout << "01 " << S->getL()->getH() << " " << S->getR()->getH() << endl;
 
             temp_Henl = S->getL()->AddSite();           // block -> block+site
                 cout << "\tHL(" << S->getL()->getH()->size1 << "x" << S->getL()->getH()->size2 << ")" << endl; // TEST
 
-                cout << "1. " << S->getL()->getH() << " " << S->getR()->getH() << endl;
+            S->saveH('l', temp_Henl);            //Store left hamiltonians in memory vectors
+
+                // cout << "1. " << S->getL()->getH() << " " << S->getR()->getH() << endl;
 
             // Shrink and break on right
-            getSYS()->DeleteMem(dir);
-
             tempH = S->loadH('r');
-            
-                cout << "2. " << temp_Henl << " " << tempH << endl;
-                cout << "   " << S->getL()->getH() << " " << S->getR()->getH() << endl;
+                // cout << "2. " << temp_Henl << " " << tempH << endl;
+                // cout << "   " << S->getL()->getH() << " " << S->getR()->getH() << endl;
 
                 cout << "\t\tHl(" << S->getL()->getH()->size1 << "x" << S->getL()->getH()->size2 << ")" << endl;
             S->getR()->BreakBlock(tempH);
-                cout << "3. " << temp_Henl << " " << tempH << endl;
-                cout << "   " << S->getL()->getH() << " " << S->getR()->getH() << endl;
+                // cout << "3. " << temp_Henl << " " << tempH << endl;
+                // cout << "   " << S->getL()->getH() << " " << S->getR()->getH() << endl;
                 cout << "\t\tHl(" << S->getL()->getH()->size1 << "x" << S->getL()->getH()->size2 << ")" << endl;
 		break;
 		case 'l':
 			// Enlarge on right
             S->getR()->Renormalize(S->getRR().back());
             temp_Henl = S->getR()->AddSite();
+            S->saveH('r', temp_Henl);
 
             // Shrink and break on left
-            getSYS()->DeleteMem(dir);
+            // getSYS()->DeleteMem(dir);
 
             tempH = S->loadH('l');
             S->getL()->BreakBlock(tempH); 
@@ -128,7 +127,8 @@ void DMRG::Finite(char dir)
     // cout << "\tNORM = " << gsl_matrix_complex_norm(getSYS()->getGUESS());   // TEST
 
 
-	cout << "\t\tHl(" << S->getL()->getH()->size1 << "x" << S->getL()->getH()->size2 << ")" << endl;
+	cout << "\t\tH_l(" << S->getL()->getH()->size1 << "x" << S->getL()->getH()->size2 << ")" << endl;
+	cout << "\t\tH_r(" << S->getR()->getH()->size1 << "x" << S->getR()->getH()->size2 << ")" << endl;
 
     cout << "Finite.3" << endl; // TEST
     
@@ -143,16 +143,14 @@ void DMRG::Finite(char dir)
     R = S->compute_Rmat();
 
     cout << "Finite.5" << endl; // TEST
-    /* Store memory */
+    /* Store R in memory */
     switch(dir)
     {
         case 'r':
             S->saveR('l', R.first);              //Storing the left one, right one already freed in GStoGuess
-            S->saveH('l', temp_Henl);            //Store left hamiltonians in memory vectors
         break;
         case 'l':
             S->saveR('r', R.second);
-            S->saveH('r', temp_Henl);
         break;
         default:
             error_message("Direction not allowed in Finite");
